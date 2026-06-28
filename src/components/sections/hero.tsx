@@ -28,7 +28,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="max-w-4xl text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl mb-6 text-foreground"
+          className="w-full max-w-4xl text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl mb-6 text-foreground"
         >
           Building Powerful <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Software Solutions</span> for Modern Businesses
         </motion.h1>
@@ -37,7 +37,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="max-w-2xl text-lg md:text-xl text-muted-foreground mb-10"
+          className="w-full max-w-2xl text-lg md:text-xl text-muted-foreground mb-10"
         >
           Trevor Digital Solutions builds enterprise software, websites, mobile applications, automation systems, AI-powered solutions, cloud software, and trading technologies for businesses worldwide.
         </motion.p>

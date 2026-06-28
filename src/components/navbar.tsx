@@ -44,15 +44,18 @@ export function Navbar() {
       )}
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 min-w-0">
           <Image
             src="/logo.png"
             alt="Trevor Digital Solutions Logo"
-            width={150}
-            height={50}
-            className="h-10 w-auto object-contain"
+            width={120}
+            height={40}
+            className="h-8 sm:h-10 w-auto object-contain shrink-0"
             priority
           />
+          <span className="text-[9px] sm:text-xs md:text-sm font-bold tracking-wider text-foreground leading-tight hidden xs:block truncate">
+            TREVOR DIGITAL<br className="sm:hidden" /> SOLUTIONS
+          </span>
         </Link>
 
         {/* Desktop Navigation */}

@@ -102,7 +102,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${inter.className} min-h-screen bg-background antialiased flex flex-col`}>
+      <body className={`${inter.className} min-h-screen bg-background antialiased flex flex-col overflow-x-hidden`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
