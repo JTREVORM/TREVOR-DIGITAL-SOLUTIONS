@@ -43,7 +43,7 @@ export function Navbar() {
           : "bg-transparent py-5"
       )}
     >
-      <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
+      <div className="container mx-auto px-4 md:px-6 flex items-center justify-between gap-3">
         <Link href="/" className="flex items-center gap-3 min-w-0">
           <Image
             src="/logo.png"
@@ -53,9 +53,8 @@ export function Navbar() {
             className="h-8 sm:h-10 w-auto object-contain shrink-0"
             priority
           />
-          <span className="hidden sm:flex flex-col text-xs sm:text-sm md:text-base font-semibold tracking-[0.18em] text-foreground leading-tight max-w-[12rem] sm:max-w-[14rem] truncate">
-            <span className="block">TREVOR DIGITAL</span>
-            <span className="block text-foreground/70">SOLUTIONS</span>
+          <span className="min-w-0 max-w-[7rem] sm:max-w-[8.5rem] md:max-w-[11rem] lg:max-w-[14rem] text-[10px] sm:text-[11px] md:text-sm lg:text-xl font-bold tracking-[0.18em] text-foreground whitespace-nowrap overflow-hidden text-ellipsis shrink">
+            TREVOR DIGITAL SOLUTIONS
           </span>
         </Link>
 

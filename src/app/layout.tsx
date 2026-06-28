@@ -111,7 +111,7 @@ export default function RootLayout({
         >
           <ScrollToTop />
           <Navbar />
-          <main className="flex-1 flex flex-col pt-[88px]">
+          <main className="flex-1 flex flex-col pt-[88px] overflow-x-hidden">
             {children}
           </main>
           <Footer />
