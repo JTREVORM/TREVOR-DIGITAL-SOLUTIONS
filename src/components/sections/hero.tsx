@@ -13,7 +13,7 @@ export function HeroSection() {
         <div className="h-[40rem] w-[40rem] bg-primary/20 rounded-full blur-[100px] opacity-50" />
       </div>
       
-      <div className="container relative z-10 mx-auto px-4 md:px-6 flex flex-col items-center text-center">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex flex-col items-center text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -28,7 +28,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="w-full max-w-4xl text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl mb-6 text-foreground"
+          className="w-full max-w-4xl text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl leading-tight break-words mb-6 text-foreground"
         >
           Building Powerful <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Software Solutions</span> for Modern Businesses
         </motion.h1>
@@ -37,7 +37,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="w-full max-w-2xl text-lg md:text-xl text-muted-foreground mb-10"
+          className="w-full max-w-2xl md:max-w-3xl text-base sm:text-lg md:text-xl text-muted-foreground mb-10"
         >
           Trevor Digital Solutions builds enterprise software, websites, mobile applications, automation systems, AI-powered solutions, cloud software, and trading technologies for businesses worldwide.
         </motion.p>

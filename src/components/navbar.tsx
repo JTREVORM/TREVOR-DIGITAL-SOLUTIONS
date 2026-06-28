@@ -44,7 +44,7 @@ export function Navbar() {
       )}
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 min-w-0">
+        <Link href="/" className="flex items-center gap-3 min-w-0">
           <Image
             src="/logo.png"
             alt="Trevor Digital Solutions Logo"
@@ -53,8 +53,9 @@ export function Navbar() {
             className="h-8 sm:h-10 w-auto object-contain shrink-0"
             priority
           />
-          <span className="text-[9px] sm:text-xs md:text-sm font-bold tracking-wider text-foreground leading-tight hidden xs:block truncate">
-            TREVOR DIGITAL<br className="sm:hidden" /> SOLUTIONS
+          <span className="hidden sm:flex flex-col text-xs sm:text-sm md:text-base font-semibold tracking-[0.18em] text-foreground leading-tight max-w-[12rem] sm:max-w-[14rem] truncate">
+            <span className="block">TREVOR DIGITAL</span>
+            <span className="block text-foreground/70">SOLUTIONS</span>
           </span>
         </Link>
 
