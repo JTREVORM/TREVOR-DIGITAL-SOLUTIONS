@@ -11,7 +11,7 @@ export default function TermsOfServicePage() {
     <section className="py-16 md:py-24 bg-background">
       <div className="container mx-auto px-4 md:px-6 max-w-4xl">
         <div className="mb-10">
-          <h1 className="text-4xl font-extrabold tracking-tight mb-3">Terms of Service</h1>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">Terms of Service</h1>
           <p className="text-muted-foreground">Last updated: {lastUpdated}</p>
         </div>
 

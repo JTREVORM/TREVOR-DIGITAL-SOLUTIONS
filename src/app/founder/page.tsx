@@ -140,7 +140,7 @@ export default function FounderPage() {
       {/* Hero */}
       <section className="py-20 md:py-28 bg-secondary/20 relative overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="h-[30rem] w-[30rem] bg-primary/10 rounded-full blur-[80px] opacity-60" />
+          <div className="h-[16rem] w-[16rem] sm:h-[20rem] sm:w-[20rem] md:h-[24rem] md:w-[24rem] bg-primary/10 rounded-full blur-[80px] opacity-60" />
         </div>
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
@@ -148,7 +148,7 @@ export default function FounderPage() {
               <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary mb-6">
                 About the Founder
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
                 Meet Mwesigwa Trevor Joseph
               </h1>
               <p className="text-xl text-muted-foreground mb-4">

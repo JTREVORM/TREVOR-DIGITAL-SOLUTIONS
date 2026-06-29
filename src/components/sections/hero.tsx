@@ -10,7 +10,7 @@ export function HeroSection() {
     <section className="relative overflow-hidden pt-20 md:pt-32 pb-16 md:pb-24">
       <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-        <div className="h-[32rem] w-[32rem] sm:h-[40rem] sm:w-[40rem] bg-primary/20 rounded-full blur-[100px] opacity-50" />
+        <div className="h-[16rem] w-[16rem] sm:h-[24rem] sm:w-[24rem] md:h-[32rem] md:w-[32rem] bg-primary/20 rounded-full blur-[100px] opacity-50" />
       </div>
       
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex flex-col items-center text-center">
