@@ -2,128 +2,211 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import Image from "next/image"
+import { usePathname } from "next/navigation"
+import { ArrowRight, Menu, Phone, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
+import { BrandLockup } from "@/components/site/logo"
+import { companyNav, contact, primaryNav } from "@/lib/site"
 
-const NAV_LINKS = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Founder", href: "/founder" },
-  { name: "Leadership", href: "/leadership" },
-  { name: "Services", href: "/services" },
-  { name: "Projects", href: "/projects" },
-  { name: "Technologies", href: "/technologies" },
-  { name: "Testimonials", href: "/testimonials" },
-  { name: "Contact", href: "/contact" },
-]
-
+/**
+ * Site header.
+ *
+ * One row at every breakpoint: brand on the left, primary navigation on the
+ * right, and a single call to action. The mobile menu is a full panel that
+ * locks body scroll and closes on route change or Escape.
+ *
+ * Note: the company name here is a <span>, not a heading. Each page owns its
+ * own <h1>, and a heading in the chrome of every page competes with it.
+ */
 export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false)
   const [isScrolled, setIsScrolled] = React.useState(false)
   const pathname = usePathname()
-  const router = useRouter()
 
   React.useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    const onScroll = () => setIsScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-   return (
-     <header
-       className={cn(
-         "fixed top-0 w-full z-50 transition-all duration-300",
-         isScrolled
-           ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm"
-           : "bg-transparent"
-       )}
-     >
-       {/* Top bar: logo corner, title centered, hamburger corner */}
-       <div className="container mx-auto px-4 md:px-6">
-         <div className="flex items-center justify-between">
-           <Link href="/" className="flex items-center gap-2 min-w-0">
-             <Image
-               src="/logo.png"
-               alt="Trevor Digital Solutions Logo"
-               width={120}
-               height={40}
-               className="h-8 sm:h-10 w-auto object-contain shrink-0"
-               priority
-             />
-           </Link>
+  // Close the panel whenever the route changes. Adjusted during render rather
+  // than in an effect, so the panel is already closed on the first frame of
+  // the new route and no cascading render is triggered.
+  const [renderedPath, setRenderedPath] = React.useState(pathname)
+  if (pathname !== renderedPath) {
+    setRenderedPath(pathname)
+    if (isOpen) setIsOpen(false)
+  }
 
-           <h1 className="text-[10px] sm:text-xs md:text-sm font-bold tracking-[0.2em] text-foreground text-center leading-tight">
-             TREVOR DIGITAL SOLUTIONS
-           </h1>
+  // Lock scrolling behind the open panel, and allow Escape to dismiss it.
+  React.useEffect(() => {
+    if (!isOpen) return
 
-           <button
-             className="lg:hidden p-2 text-foreground"
-             onClick={() => setIsOpen(!isOpen)}
-             aria-label="Toggle Menu"
-           >
-             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-           </button>
-         </div>
-       </div>
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
 
-       {/* Desktop Navigation */}
-       <nav className="hidden lg:flex items-center justify-center gap-6">
-         {NAV_LINKS.map((link) => (
-           <Link
-             key={link.name}
-             href={link.href}
-             className={cn(
-               "text-sm font-medium transition-colors hover:text-primary",
-               pathname === link.href ? "text-primary" : "text-muted-foreground"
-             )}
-           >
-             {link.name}
-           </Link>
-         ))}
-       </nav>
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false)
+    }
+    window.addEventListener("keydown", onKeyDown)
 
-       <div className="hidden lg:flex items-center justify-center gap-4 mt-3">
-         <Button variant="ghost" onClick={() => router.push("/contact")}>
-           Get Free Consultation
-         </Button>
-         <Button onClick={() => router.push("/contact")}>
-           Request Quote
-         </Button>
-       </div>
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener("keydown", onKeyDown)
+    }
+  }, [isOpen])
 
-       {/* Mobile Navigation */}
-       {isOpen && (
-         <div className="lg:hidden absolute top-full left-0 w-full bg-background border-b border-border p-4 flex flex-col gap-4 shadow-lg">
-           <nav className="flex flex-col gap-2">
-             {NAV_LINKS.map((link) => (
-               <Link
-                 key={link.name}
-                 href={link.href}
-                 className={cn(
-                   "p-2 text-base font-medium rounded-md transition-colors hover:bg-muted",
-                   pathname === link.href ? "text-primary bg-primary/10" : "text-foreground"
-                 )}
-                 onClick={() => setIsOpen(false)}
-               >
-                 {link.name}
-               </Link>
-             ))}
-           </nav>
-           <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-border">
-             <Button variant="outline" className="w-full justify-center" onClick={() => { router.push("/contact"); setIsOpen(false); }}>
-               Get Free Consultation
-             </Button>
-             <Button className="w-full justify-center" onClick={() => { router.push("/contact"); setIsOpen(false); }}>
-               Request Quote
-             </Button>
-           </div>
-         </div>
-       )}
-     </header>
-   )
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href)
+
+  return (
+    <>
+      {/* Scrim behind the mobile panel, so the page below reads as inactive
+          and a tap outside dismisses the menu.
+
+          It sits outside <header> on purpose: the header carries
+          `backdrop-blur`, and a backdrop-filter makes an element the
+          containing block for its fixed-position descendants, which would
+          trap this overlay inside the 64px bar instead of covering the page. */}
+      {isOpen ? (
+        <button
+          type="button"
+          aria-label="Close menu"
+          tabIndex={-1}
+          onClick={() => setIsOpen(false)}
+          className="fixed inset-x-0 top-16 bottom-0 z-40 cursor-default bg-background/85 lg:hidden"
+        />
+      ) : null}
+
+      <header
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
+        isScrolled || isOpen
+          ? "border-b border-hairline bg-background/85 backdrop-blur-xl"
+          : "border-b border-transparent bg-transparent"
+      )}
+    >
+      <div className="shell">
+        <div className="flex h-16 items-center justify-between gap-4 sm:h-[4.5rem]">
+          <BrandLockup preload className="min-w-0" />
+
+          <nav aria-label="Main" className="hidden lg:block">
+            <ul className="flex items-center gap-1">
+              {primaryNav.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    className={cn(
+                      "relative block rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                      isActive(link.href)
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {link.name}
+                    {isActive(link.href) ? (
+                      <span
+                        className="absolute inset-x-3 -bottom-0.5 h-px bg-brand"
+                        aria-hidden
+                      />
+                    ) : null}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <Button size="cta" className="hidden lg:inline-flex" asChild>
+              <Link href="/contact">
+                Start a Project
+                <ArrowRight aria-hidden />
+              </Link>
+            </Button>
+
+            <button
+              type="button"
+              className="-mr-2 inline-flex size-11 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted lg:hidden"
+              onClick={() => setIsOpen((open) => !open)}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+            >
+              {isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile panel */}
+      <div
+        id="mobile-menu"
+        hidden={!isOpen}
+        className="relative z-10 max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-hairline bg-background lg:hidden"
+      >
+        <div className="shell py-6">
+          <nav aria-label="Main">
+            <ul className="flex flex-col gap-1">
+              {primaryNav.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    className={cn(
+                      "flex items-center justify-between rounded-lg px-3 py-3 text-base font-medium transition-colors",
+                      isActive(link.href)
+                        ? "bg-primary/10 text-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    )}
+                  >
+                    {link.name}
+                    {isActive(link.href) ? (
+                      <span className="size-1.5 rounded-full bg-brand" aria-hidden />
+                    ) : null}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="mt-6 border-t border-hairline pt-6">
+            <p className="eyebrow mb-4">Company</p>
+            <ul className="grid grid-cols-2 gap-x-4 gap-y-1">
+              {companyNav
+                .filter((link) => link.href !== "/about" && link.href !== "/contact")
+                .map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="block rounded px-1 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+          </div>
+
+          <div className="mt-6 flex flex-col gap-3 border-t border-hairline pt-6">
+            <Button size="cta-lg" asChild>
+              <Link href="/contact">
+                Start a Project
+                <ArrowRight aria-hidden />
+              </Link>
+            </Button>
+            <Button size="cta-lg" variant="outline" asChild>
+              <a href={contact.phoneHref}>
+                <Phone aria-hidden />
+                {contact.phone}
+              </a>
+            </Button>
+          </div>
+          </div>
+        </div>
+      </header>
+    </>
+  )
 }

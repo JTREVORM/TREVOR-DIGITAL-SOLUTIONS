@@ -1,99 +1,101 @@
-"use client"
-
-import { motion } from "framer-motion"
 import Link from "next/link"
+import { ArrowRight, FileCode2, MessageSquare, Radio } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Code2, Users, Building2, Clock } from "lucide-react"
+import { primaryTechnologies } from "@/lib/content/technologies"
+import { site } from "@/lib/site"
+
+/**
+ * Homepage hero.
+ *
+ * Kept as a server component: there is nothing interactive here, and the
+ * headline is the largest contentful paint, so it should not wait on
+ * client-side animation to appear.
+ */
+
+const COMMITMENTS = [
+  {
+    icon: MessageSquare,
+    title: "Direct access to your engineer",
+    description: "No account manager in between.",
+  },
+  {
+    icon: FileCode2,
+    title: "You own the source code",
+    description: "Full handover, no lock-in.",
+  },
+  {
+    icon: Radio,
+    title: "Built for real networks",
+    description: "Works on mobile data, tolerates drops.",
+  },
+]
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden pt-20 md:pt-32 pb-16 md:pb-24">
-      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
-      <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-        <div className="h-[16rem] w-[16rem] sm:h-[24rem] sm:w-[24rem] md:h-[32rem] md:w-[32rem] bg-primary/20 rounded-full blur-[100px] opacity-50" />
-      </div>
-      
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex flex-col items-center text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary mb-8"
-        >
-          <span className="flex h-2 w-2 rounded-full bg-primary mr-2 animate-pulse" />
-          Enterprise-Grade Software Engineering
-        </motion.div>
+    <section className="relative isolate overflow-hidden border-b border-hairline">
+      <div className="brand-grid pointer-events-none absolute inset-0 opacity-70" aria-hidden />
+      <div className="brand-wash pointer-events-none absolute inset-0" aria-hidden />
+      {/* Fade the grid out toward the bottom so it never fights the content. */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-background to-transparent"
+        aria-hidden
+      />
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="w-full max-w-4xl text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl leading-tight break-words mb-6 text-foreground"
-        >
-          Building Powerful <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Software Solutions</span> for Modern Businesses
-        </motion.h1>
+      <div className="shell relative pt-16 pb-20 sm:pt-20 sm:pb-24 lg:pt-28 lg:pb-32">
+        <div className="max-w-3xl">
+          <p className="eyebrow">Software engineering &middot; {site.location}</p>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="w-full max-w-2xl md:max-w-3xl text-base sm:text-lg md:text-xl text-muted-foreground mb-10"
-        >
-          Trevor Digital Solutions builds enterprise software, websites, mobile applications, automation systems, AI-powered solutions, cloud software, and trading technologies for businesses worldwide.
-        </motion.p>
+          <h1 className="mt-6 text-[2.125rem] leading-[1.08] font-semibold text-foreground sm:text-[3rem] lg:text-[3.75rem]">
+            We build the software behind better businesses.
+          </h1>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-col sm:flex-row gap-4 mb-16"
-        >
-          <Button size="lg" className="h-12 px-8 text-base group" asChild>
-            <Link href="/projects">
-              View Our Projects
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </Button>
-          <Button size="lg" variant="outline" className="h-12 px-8 text-base bg-background/50 backdrop-blur-sm" asChild>
-            <Link href="/contact">Get Free Consultation</Link>
-          </Button>
-        </motion.div>
+          <p className="mt-7 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:text-xl">
+            Trevor Digital Solutions designs and engineers custom software,
+            business management systems, websites, mobile applications, AI
+            solutions and trading technologies &mdash; built around the way your
+            business actually runs, and maintained long after launch.
+          </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 pt-8 border-t border-border/50 w-full max-w-4xl"
-        >
-          <div className="flex flex-col items-center justify-center space-y-2">
-            <div className="p-3 bg-primary/10 rounded-2xl mb-2">
-              <Code2 className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-3xl font-bold text-foreground">50+</h3>
-            <p className="text-sm font-medium text-muted-foreground">Projects Completed</p>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Button size="cta-lg" asChild>
+              <Link href="/contact">
+                Start a Project
+                <ArrowRight aria-hidden />
+              </Link>
+            </Button>
+            <Button size="cta-lg" variant="outline" asChild>
+              <Link href="/projects">View Our Work</Link>
+            </Button>
           </div>
-          <div className="flex flex-col items-center justify-center space-y-2">
-            <div className="p-3 bg-primary/10 rounded-2xl mb-2">
-              <Users className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-3xl font-bold text-foreground">40+</h3>
-            <p className="text-sm font-medium text-muted-foreground">Happy Clients</p>
-          </div>
-          <div className="flex flex-col items-center justify-center space-y-2">
-            <div className="p-3 bg-primary/10 rounded-2xl mb-2">
-              <Building2 className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-3xl font-bold text-foreground">100+</h3>
-            <p className="text-sm font-medium text-muted-foreground">Solutions Delivered</p>
-          </div>
-          <div className="flex flex-col items-center justify-center space-y-2">
-            <div className="p-3 bg-primary/10 rounded-2xl mb-2">
-              <Clock className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-3xl font-bold text-foreground">24/7</h3>
-            <p className="text-sm font-medium text-muted-foreground">Support</p>
-          </div>
-        </motion.div>
+        </div>
+
+        {/* How we work, in three lines. No unverifiable counters. */}
+        <ul className="mt-16 grid gap-px overflow-hidden rounded-xl bg-hairline ring-1 ring-hairline sm:mt-20 sm:grid-cols-3">
+          {COMMITMENTS.map((item) => (
+            <li key={item.title} className="bg-surface/80 p-6 backdrop-blur-sm">
+              <item.icon className="size-5 text-brand-lift" aria-hidden />
+              <h2 className="mt-4 text-[0.9375rem] font-semibold text-foreground">
+                {item.title}
+              </h2>
+              <p className="mt-1.5 text-sm text-muted-foreground">{item.description}</p>
+            </li>
+          ))}
+        </ul>
+
+        {/* Quiet stack signal. Static: no marquee, no perpetual animation. */}
+        <div className="mt-12 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="mr-1 text-xs font-medium tracking-wide text-muted-foreground/70">
+            Working in
+          </span>
+          {primaryTechnologies.map((tech) => (
+            <span
+              key={tech}
+              className="rounded-md px-2.5 py-1 font-[family-name:var(--font-mono)] text-[0.6875rem] text-muted-foreground ring-1 ring-hairline"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   )

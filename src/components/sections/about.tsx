@@ -1,66 +1,72 @@
-"use client"
+import { Section } from "@/components/site/section"
+import { Reveal } from "@/components/site/reveal"
+import { LogoFull } from "@/components/site/logo"
+import { site } from "@/lib/site"
 
-import { motion } from "framer-motion"
-import { CheckCircle2 } from "lucide-react"
-
+/**
+ * Who TDS is, plus mission and vision. Used on the About page.
+ *
+ * This is also the site's primary brand section: the logo is shown here at a
+ * size where the full lockup, wordmark and tagline included, actually reads.
+ */
 export function AboutSection() {
   return (
-    <section className="py-20 md:py-32 bg-secondary/30 relative overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
-              Empowering Businesses Through <span className="text-primary">Digital Transformation</span>
-            </h2>
-            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-              Trevor Digital Solutions is a modern software engineering company specializing in developing reliable, scalable, and secure digital solutions.
+    <Section tone="surface" space="loose" divide="both">
+      <div className="grid gap-14 lg:grid-cols-2 lg:items-start lg:gap-20">
+        <Reveal>
+          <h2 className="eyebrow">Who we are</h2>
+          <p className="mt-6 text-xl leading-relaxed text-foreground sm:text-2xl">
+            Trevor Digital Solutions is a software engineering company in{" "}
+            {site.location}. We build the systems businesses run on, and we stay
+            on to maintain them.
+          </p>
+          <div className="mt-7 space-y-5 text-base leading-relaxed text-muted-foreground">
+            <p>
+              Most of the work that reaches us starts the same way: a business
+              has outgrown its spreadsheets. Numbers disagree between
+              departments, stock cannot be trusted, reporting takes a week, and
+              the workarounds have become the process. Off-the-shelf software
+              would solve part of it and break another part.
             </p>
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              We build software that transforms businesses by improving efficiency, automating operations, and delivering exceptional user experiences. Our services cover everything from business management systems to enterprise applications, websites, mobile apps, cloud platforms, and custom software.
+            <p>
+              So we build the system around the business instead. That means
+              spending real time on discovery before writing code, scoping the
+              work in writing, and engineering it to be maintained for years
+              rather than demoed once. It also means telling clients when a
+              project is not worth building, which costs us work and saves them
+              more.
             </p>
-            
-            <ul className="space-y-4">
-              {[
-                "Reliable, Scalable, and Secure Digital Solutions",
-                "Improving Efficiency & Automating Operations",
-                "Exceptional User Experiences",
-                "Enterprise Applications & Cloud Platforms"
-              ].map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <CheckCircle2 className="h-6 w-6 text-primary shrink-0" />
-                  <span className="text-foreground font-medium">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+            <p>
+              We work across custom software, business management systems, web
+              and mobile applications, AI and automation, cloud infrastructure
+              and trading technologies &mdash; for clients in Uganda and beyond.
+            </p>
+          </div>
+        </Reveal>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="relative"
-          >
-            <div className="absolute inset-0 bg-primary/20 rounded-3xl blur-3xl transform rotate-3" />
-            <div className="relative bg-card border border-border p-8 md:p-10 rounded-3xl shadow-2xl">
-              <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
-              <p className="text-muted-foreground mb-8">
-                To empower businesses through innovative software development, automation, and digital transformation.
-              </p>
-              
-              <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
-              <p className="text-muted-foreground">
-                To become one of Africa&apos;s leading software engineering and technology consulting companies.
-              </p>
-            </div>
-          </motion.div>
-        </div>
+        <Reveal index={1} className="space-y-6">
+          {/* Brand panel: the official logo at a legible size. */}
+          <div className="overflow-hidden rounded-2xl bg-background ring-1 ring-hairline">
+            <LogoFull />
+          </div>
+
+          <div className="rounded-2xl bg-surface-raised p-7 ring-1 ring-hairline sm:p-8">
+            <h3 className="eyebrow">Mission</h3>
+            <p className="mt-4 text-base leading-relaxed text-foreground/90">
+              To give growing businesses software they can actually rely on:
+              built for their process, owned outright, and supported long after
+              launch.
+            </p>
+
+            <h3 className="eyebrow mt-9">Vision</h3>
+            <p className="mt-4 text-base leading-relaxed text-foreground/90">
+              To be one of Africa&apos;s most trusted software engineering
+              companies &mdash; known less for how much we build than for how
+              well the things we build keep working.
+            </p>
+          </div>
+        </Reveal>
       </div>
-    </section>
+    </Section>
   )
 }

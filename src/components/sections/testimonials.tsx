@@ -1,89 +1,79 @@
-"use client"
+import Link from "next/link"
+import { ArrowRight, Quote } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Section, SectionHeading } from "@/components/site/section"
+import { Reveal } from "@/components/site/reveal"
+import { publishedTestimonials } from "@/lib/content/testimonials"
 
-import { motion } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
-import { Star, Quote } from "lucide-react"
-
-const TESTIMONIALS = [
-  {
-    name: "Sarah Kyomugisha",
-    role: "Operations Director",
-    company: "Lakeside Logistics",
-    content: "Trevor Digital Solutions completely transformed our supply chain with their custom ERP system. It's fast, reliable, and the support has been outstanding.",
-    rating: 5,
-  },
-  {
-    name: "David Otim",
-    role: "CEO",
-    company: "FinTech Africa",
-    content: "The API integrations and custom dashboards they built for our trading platform are world-class. Highly recommended for any complex software needs.",
-    rating: 5,
-  },
-  {
-    name: "Dr. Grace N.",
-    role: "Medical Director",
-    company: "Kampala Medical Center",
-    content: "Our hospital management system was outdated and slow. Trevor and his team developed a modern, secure solution that our staff loves using every day.",
-    rating: 5,
-  },
-]
-
+/**
+ * Client feedback.
+ *
+ * Renders only testimonials marked verified in the content module. Until
+ * consent is on file that list is empty, so the section shows an honest
+ * placeholder pointing at the work itself instead of quotes we cannot stand
+ * behind.
+ */
 export function TestimonialsSection() {
-  return (
-    <section className="py-20 md:py-32 bg-secondary/10 relative" id="testimonials">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
-          >
-            Client Testimonials
-          </motion.h2>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="h-1 w-20 bg-primary mx-auto rounded-full mb-6"
-          />
+  if (publishedTestimonials.length === 0) {
+    return (
+      <Section space="loose">
+        <div className="max-w-2xl">
+          <h2 className="eyebrow">Client feedback</h2>
+          <p className="mt-6 text-xl leading-relaxed text-foreground sm:text-2xl">
+            We publish client feedback only with written permission from the
+            person quoted.
+          </p>
+          <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+            Several clients have agreed in principle and we are collecting those
+            approvals now. Until they are confirmed, this page stays empty
+            rather than filled with quotes you have no way to check. In the
+            meantime, the projects themselves are the more useful evidence
+            &mdash; and we are happy to arrange a direct reference call for a
+            serious enquiry.
+          </p>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <Button size="cta-lg" asChild>
+              <Link href="/projects">
+                See the work
+                <ArrowRight aria-hidden />
+              </Link>
+            </Button>
+            <Button size="cta-lg" variant="outline" asChild>
+              <Link href="/contact">Request a reference</Link>
+            </Button>
+          </div>
         </div>
+      </Section>
+    )
+  }
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {TESTIMONIALS.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Card className="h-full bg-card border-border relative">
-                <div className="absolute top-6 right-6 text-primary/20">
-                  <Quote className="h-10 w-10" />
-                </div>
-                <CardContent className="p-8 pt-10">
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-500 fill-yellow-500" />
-                    ))}
-                  </div>
-                  <p className="text-lg text-muted-foreground mb-6 italic">
-                    "{testimonial.content}"
-                  </p>
-                  <div>
-                    <h4 className="font-bold text-foreground">{testimonial.name}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {testimonial.role}, {testimonial.company}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
+  return (
+    <Section space="loose">
+      <SectionHeading
+        eyebrow="Client feedback"
+        title="What clients have said."
+        description="Published with permission from the people quoted."
+      />
+      <ul className="mt-14 grid gap-6 lg:grid-cols-3">
+        {publishedTestimonials.map((testimonial, index) => (
+          <Reveal as="li" key={testimonial.name} index={index} className="h-full">
+            <figure className="flex h-full flex-col rounded-xl bg-surface p-7 ring-1 ring-hairline">
+              <Quote className="size-6 shrink-0 text-brand-lift/50" aria-hidden />
+              <blockquote className="mt-5 flex-1 text-base leading-relaxed text-foreground/90">
+                {testimonial.quote}
+              </blockquote>
+              <figcaption className="mt-7 border-t border-hairline pt-5">
+                <span className="block text-[0.9375rem] font-semibold text-foreground">
+                  {testimonial.name}
+                </span>
+                <span className="mt-1 block text-sm text-muted-foreground">
+                  {testimonial.role}, {testimonial.company}
+                </span>
+              </figcaption>
+            </figure>
+          </Reveal>
+        ))}
+      </ul>
+    </Section>
   )
 }

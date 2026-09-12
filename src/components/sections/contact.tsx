@@ -1,21 +1,44 @@
 "use client"
 
 import { useState } from "react"
-import { motion } from "framer-motion"
+import { ArrowRight, Check, Clock, Mail, MapPin, Phone } from "lucide-react"
 import { submitContactForm } from "@/app/actions/contact"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { WhatsAppIcon } from "@/components/site/social-icons"
 import { toast } from "sonner"
-import { MapPin, Phone, Mail, Send } from "lucide-react"
+import { contact, site } from "@/lib/site"
+import { services } from "@/lib/content/services"
+
+const BUDGET_BANDS = [
+  "Under $1,000",
+  "$1,000 - $3,000",
+  "$3,000 - $7,500",
+  "$7,500 - $15,000",
+  "Over $15,000",
+  "Not sure yet",
+]
+
+const selectClasses =
+  "h-11 w-full rounded-lg border border-input bg-input/30 px-3.5 text-sm text-foreground transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+
+/**
+ * The shared Input is sized for dense admin screens (h-8). A public enquiry
+ * form needs comfortable touch targets, so the controls are enlarged here on
+ * the form itself rather than by changing the component the admin depends on.
+ */
+const formControlSizing =
+  "[&_input]:h-11 [&_input]:px-3.5 [&_textarea]:px-3.5 [&_textarea]:py-3"
 
 export function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [reference, setReference] = useState<string | null>(null)
 
   async function clientAction(formData: FormData) {
     setIsSubmitting(true)
-    
+
     const data = {
       fullName: formData.get("fullName") as string,
       companyName: formData.get("companyName") as string,
@@ -25,23 +48,24 @@ export function ContactSection() {
       budget: formData.get("budget") as string,
       projectDescription: formData.get("projectDescription") as string,
     }
-    
+
     try {
       const result = await submitContactForm(data)
       if (result.success) {
-        toast.success("Message Sent!", {
-          description: `Your inquiry has been received. Reference: ${result.reference}`,
+        setReference(result.reference ?? null)
+        toast.success("Message sent", {
+          description: `We have your enquiry. Reference: ${result.reference}`,
         })
-        const formElement = document.getElementById("contactForm") as HTMLFormElement;
-        if (formElement) formElement.reset()
+        const form = document.getElementById("contactForm") as HTMLFormElement | null
+        form?.reset()
       } else {
-        toast.error("Error", {
-          description: result.error || "Failed to send message.",
+        toast.error("Could not send", {
+          description: result.error || "Failed to send your message.",
         })
       }
-    } catch (error) {
-      toast.error("Error", {
-        description: "An unexpected error occurred.",
+    } catch {
+      toast.error("Could not send", {
+        description: "Something went wrong. Please call or message us instead.",
       })
     } finally {
       setIsSubmitting(false)
@@ -49,155 +73,236 @@ export function ContactSection() {
   }
 
   return (
-    <section className="py-20 md:py-32 bg-background relative" id="contact">
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-          <div className="h-[16rem] w-[16rem] sm:h-[24rem] sm:w-[24rem] md:h-[32rem] md:w-[32rem] bg-primary/5 rounded-full blur-[100px] opacity-50" />
-        </div>
-      
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
-          >
-            Get In Touch
-          </motion.h2>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="h-1 w-20 bg-primary mx-auto rounded-full mb-6"
-          />
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-muted-foreground max-w-2xl mx-auto text-lg"
-          >
-            Ready to transform your business? Contact us today for a free consultation and let's discuss how we can help you achieve your goals.
-          </motion.p>
-        </div>
+    <section id="contact" className="py-16 sm:py-20 lg:py-24">
+      <div className="shell">
+        <div className="grid gap-12 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-16">
+          {/* Contact details */}
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <h2 className="eyebrow">Reach us directly</h2>
+            <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+              If you would rather talk than type, call or message. You will
+              reach the people who would be building your software, not a call
+              centre.
+            </p>
 
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Contact Information */}
-          <div className="lg:col-span-1 space-y-8">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-card border border-border p-8 rounded-2xl shadow-lg"
-            >
-              <h3 className="text-xl font-bold mb-6">Contact Information</h3>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary/10 rounded-full shrink-0">
-                    <Phone className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Phone</p>
-                    <a href="tel:+256740081305" className="text-muted-foreground hover:text-primary transition-colors">
-                      +256 740 081 305
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary/10 rounded-full shrink-0">
-                    <Mail className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Email</p>
-                    <a href="mailto:trevordigitalsolutions@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
-                      trevordigitalsolutions@gmail.com
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary/10 rounded-full shrink-0">
-                    <MapPin className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Location</p>
-                    <p className="text-muted-foreground">Kampala, Uganda</p>
-                  </div>
-                </div>
-              </div>
+            <ul className="mt-8 space-y-5">
+              <li>
+                <a
+                  href={contact.phoneHref}
+                  className="group flex items-start gap-4 text-sm"
+                >
+                  <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
+                    <Phone className="size-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
+                      Phone
+                    </span>
+                    <span className="mt-1 block text-foreground transition-colors group-hover:text-brand-lift">
+                      {contact.phone}
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={contact.emailHref}
+                  className="group flex items-start gap-4 text-sm"
+                >
+                  <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
+                    <Mail className="size-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
+                      Email
+                    </span>
+                    <span className="mt-1 block break-all text-foreground transition-colors group-hover:text-brand-lift">
+                      {contact.email}
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li className="flex items-start gap-4 text-sm">
+                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
+                  <MapPin className="size-4" aria-hidden />
+                </span>
+                <span>
+                  <span className="block text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
+                    Location
+                  </span>
+                  <span className="mt-1 block text-foreground">{site.location}</span>
+                </span>
+              </li>
+              <li className="flex items-start gap-4 text-sm">
+                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
+                  <Clock className="size-4" aria-hidden />
+                </span>
+                <span>
+                  <span className="block text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
+                    Hours
+                  </span>
+                  <span className="mt-1 block text-foreground">{site.hours}</span>
+                </span>
+              </li>
+            </ul>
 
-              <div className="mt-8 pt-8 border-t border-border">
-                <h4 className="font-medium mb-4">Connect Directly</h4>
-                <Button className="w-full mb-3" asChild>
-                  <a href="https://wa.me/256740081305" target="_blank" rel="noopener noreferrer">
-                    Chat on WhatsApp
-                  </a>
-                </Button>
-              </div>
-            </motion.div>
+            <Button size="cta-lg" variant="outline" className="mt-8 w-full" asChild>
+              <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="size-[1.125rem]" />
+                Chat on WhatsApp
+              </a>
+            </Button>
           </div>
 
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="bg-card border border-border p-8 md:p-10 rounded-2xl shadow-lg"
-            >
-              <h3 className="text-2xl font-bold mb-6">Send us a message</h3>
-              <form id="contactForm" action={clientAction} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
+          {/* Form */}
+          <div className="min-w-0">
+            <div className="rounded-2xl bg-surface p-6 ring-1 ring-hairline sm:p-9">
+              <h2 className="text-2xl font-semibold text-foreground">
+                Tell us about your project
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                The more you can describe the problem, the more useful our first
+                reply will be. Fields marked with an asterisk are required.
+              </p>
+
+              {reference ? (
+                <div className="mt-6 flex items-start gap-3 rounded-lg bg-primary/10 p-4 ring-1 ring-primary/25">
+                  <Check className="mt-0.5 size-4 shrink-0 text-brand-lift" aria-hidden />
+                  <p className="text-sm text-foreground">
+                    Enquiry received. Your reference is{" "}
+                    <span className="font-[family-name:var(--font-mono)] text-brand-lift">
+                      {reference}
+                    </span>
+                    . Quote it if you follow up by phone.
+                  </p>
+                </div>
+              ) : null}
+
+              <form
+                id="contactForm"
+                action={clientAction}
+                className={`mt-8 space-y-6 ${formControlSizing}`}
+              >
+                <div className="grid gap-6 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="fullName">Full Name</Label>
-                    <Input id="fullName" name="fullName" placeholder="John Doe" required />
+                    <Label htmlFor="fullName">Full name *</Label>
+                    <Input
+                      id="fullName"
+                      name="fullName"
+                      autoComplete="name"
+                      placeholder="Your name"
+                      required
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="companyName">Company Name (Optional)</Label>
-                    <Input id="companyName" name="companyName" placeholder="Your Company" />
+                    <Label htmlFor="companyName">Company</Label>
+                    <Input
+                      id="companyName"
+                      name="companyName"
+                      autoComplete="organization"
+                      placeholder="Optional"
+                    />
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid gap-6 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input id="email" name="email" type="email" placeholder="john@example.com" required />
+                    <Label htmlFor="email">Email address *</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      inputMode="email"
+                      placeholder="you@company.com"
+                      required
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number (Optional)</Label>
-                    <Input id="phone" name="phone" placeholder="+256..." />
+                    <Label htmlFor="phone">Phone or WhatsApp</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      autoComplete="tel"
+                      inputMode="tel"
+                      placeholder="+256 ..."
+                    />
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid gap-6 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="serviceRequired">Service Required</Label>
-                    <Input id="serviceRequired" name="serviceRequired" placeholder="e.g. Website Development" />
+                    <Label htmlFor="serviceRequired">What do you need?</Label>
+                    <select
+                      id="serviceRequired"
+                      name="serviceRequired"
+                      defaultValue=""
+                      className={selectClasses}
+                    >
+                      <option value="">Select a service</option>
+                      {services.map((service) => (
+                        <option key={service.slug} value={service.title}>
+                          {service.title}
+                        </option>
+                      ))}
+                      <option value="Something else">Something else</option>
+                    </select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="budget">Estimated Budget (Optional)</Label>
-                    <Input id="budget" name="budget" placeholder="$500 - $1,000" />
+                    <Label htmlFor="budget">Budget range</Label>
+                    <select
+                      id="budget"
+                      name="budget"
+                      defaultValue=""
+                      className={selectClasses}
+                    >
+                      <option value="">Select a range</option>
+                      {BUDGET_BANDS.map((band) => (
+                        <option key={band} value={band}>
+                          {band}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="projectDescription">Project Description</Label>
-                  <Textarea 
-                    id="projectDescription" 
+                  <Label htmlFor="projectDescription">Project description *</Label>
+                  <Textarea
+                    id="projectDescription"
                     name="projectDescription"
-                    placeholder="Tell us about your project requirements..." 
-                    className="min-h-[150px] resize-none"
+                    placeholder="What should the system do? What is not working today? Who will use it?"
+                    className="min-h-40 resize-y"
                     required
+                    minLength={10}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    At least a couple of sentences, please. Ten characters
+                    minimum.
+                  </p>
                 </div>
 
-                <Button type="submit" size="lg" className="w-full md:w-auto px-8" disabled={isSubmitting}>
-                  {isSubmitting ? "Sending..." : "Submit Message"}
-                  {!isSubmitting && <Send className="ml-2 h-4 w-4" />}
-                </Button>
+                <div className="flex flex-col gap-4 border-t border-hairline pt-6 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs leading-relaxed text-muted-foreground sm:max-w-xs">
+                    We use your details to reply to this enquiry only. See our{" "}
+                    <a href="/privacy-policy" className="text-brand-lift hover:underline">
+                      privacy policy
+                    </a>
+                    .
+                  </p>
+                  <Button
+                    type="submit"
+                    size="cta-lg"
+                    disabled={isSubmitting}
+                    className="w-full sm:w-auto"
+                  >
+                    {isSubmitting ? "Sending..." : "Send enquiry"}
+                    {!isSubmitting ? <ArrowRight aria-hidden /> : null}
+                  </Button>
+                </div>
               </form>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

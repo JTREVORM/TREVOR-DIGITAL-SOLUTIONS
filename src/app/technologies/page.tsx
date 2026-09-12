@@ -1,133 +1,96 @@
 import type { Metadata } from "next"
-import { TechnologiesSection } from "@/components/sections/technologies"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { PageHero } from "@/components/site/page-hero"
+import { Section } from "@/components/site/section"
+import { Reveal } from "@/components/site/reveal"
+import { CtaBand } from "@/components/site/cta-band"
+import { techGroups } from "@/lib/content/technologies"
 
 export const metadata: Metadata = {
   title: "Technologies",
-  description: "Explore the modern technology stack used by Trevor Digital Solutions — React, Next.js, Flutter, Python, MQL5, PostgreSQL, AWS, and more.",
+  description:
+    "The stack Trevor Digital Solutions builds on: TypeScript, React, Next.js, Node.js, Python, Flutter, PostgreSQL, MQL5, Docker, AWS and Google Cloud.",
   openGraph: {
-    title: "Our Technology Stack | Trevor Digital Solutions",
-    description: "Cutting-edge technologies powering enterprise software solutions.",
+    title: "Technologies | Trevor Digital Solutions",
+    description:
+      "A deliberately boring stack, chosen for long support horizons and maintainability.",
     url: "https://trevordigitalsolutions.com/technologies",
   },
+  alternates: { canonical: "https://trevordigitalsolutions.com/technologies" },
 }
-
-const TECH_CATEGORIES = [
-  {
-    category: "Frontend",
-    techs: [
-      { name: "React", description: "UI library for building component-based interfaces." },
-      { name: "Next.js", description: "Full-stack React framework with server-side rendering." },
-      { name: "TypeScript", description: "Strongly-typed superset of JavaScript." },
-      { name: "Tailwind CSS", description: "Utility-first CSS framework for rapid styling." },
-    ],
-  },
-  {
-    category: "Backend",
-    techs: [
-      { name: "Node.js", description: "JavaScript runtime for server-side applications." },
-      { name: "Python", description: "Versatile language for backend and AI/ML." },
-      { name: "Django", description: "High-level Python web framework." },
-      { name: "FastAPI", description: "Modern, fast Python web framework for APIs." },
-    ],
-  },
-  {
-    category: "Databases",
-    techs: [
-      { name: "PostgreSQL", description: "Advanced open-source relational database." },
-      { name: "Supabase", description: "Open-source Firebase alternative with PostgreSQL." },
-      { name: "MongoDB", description: "Document-based NoSQL database." },
-      { name: "Redis", description: "In-memory data structure store for caching." },
-    ],
-  },
-  {
-    category: "Mobile",
-    techs: [
-      { name: "Flutter", description: "Google's cross-platform mobile framework." },
-      { name: "React Native", description: "JavaScript-based cross-platform mobile framework." },
-      { name: "Dart", description: "Language optimized for Flutter development." },
-    ],
-  },
-  {
-    category: "Forex & Trading",
-    techs: [
-      { name: "MQL4", description: "Language for MetaTrader 4 EAs and indicators." },
-      { name: "MQL5", description: "Language for MetaTrader 5 EAs and indicators." },
-      { name: "MetaTrader 4", description: "Industry-standard trading platform." },
-      { name: "MetaTrader 5", description: "Advanced next-generation trading platform." },
-    ],
-  },
-  {
-    category: "Cloud & DevOps",
-    techs: [
-      { name: "AWS", description: "Amazon Web Services — world's leading cloud." },
-      { name: "Google Cloud", description: "Google's cloud platform for AI and infrastructure." },
-      { name: "Docker", description: "Containerization for consistent deployments." },
-      { name: "Kubernetes", description: "Container orchestration at scale." },
-      { name: "Vercel", description: "Deployment platform optimized for Next.js." },
-    ],
-  },
-]
 
 export default function TechnologiesPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="py-20 md:py-28 bg-secondary/20 relative overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="h-[16rem] w-[16rem] sm:h-[20rem] sm:w-[20rem] md:h-[24rem] md:w-[24rem] bg-primary/10 rounded-full blur-[80px] opacity-60" />
-        </div>
-        <div className="container mx-auto px-4 md:px-6 relative z-10 text-center">
-          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary mb-6">
-            Tech Stack
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-6">Technologies</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            We stay at the cutting edge of technology to build solutions that are modern, scalable, and future-proof.
-          </p>
-        </div>
-      </section>
-
-      {/* Marquee */}
-      <TechnologiesSection />
-
-      {/* Grid by Category */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="space-y-16">
-            {TECH_CATEGORIES.map((cat) => (
-              <div key={cat.category}>
-                <h2 className="text-2xl font-bold mb-6 pb-3 border-b border-border">{cat.category}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {cat.techs.map((tech) => (
-                    <div key={tech.name} className="p-5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group">
-                      <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">{tech.name}</h3>
-                      <p className="text-sm text-muted-foreground">{tech.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-primary/5 border-y border-border">
-        <div className="container mx-auto px-4 md:px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to build with modern technology?</h2>
-          <p className="text-muted-foreground mb-8 max-w-xl mx-auto text-lg">
-            Let&apos;s discuss the right technology stack for your project.
-          </p>
-          <Button size="lg" asChild>
+      <PageHero
+        eyebrow="Technologies"
+        title="A deliberately boring stack."
+        lead="We pick tools with long support horizons, good documentation and a large enough talent pool that your system can still be maintained in five years — by us, by your own team, or by whoever comes after us. Novelty is not a feature."
+        crumbs={[{ name: "Home", href: "/" }, { name: "Technologies" }]}
+        actions={
+          <Button size="cta-lg" asChild>
             <Link href="/contact">
-              Get Free Consultation <ArrowRight className="ml-2 h-4 w-4" />
+              Discuss your stack
+              <ArrowRight aria-hidden />
             </Link>
           </Button>
+        }
+      />
+
+      <Section space="loose">
+        <div className="space-y-16 lg:space-y-20">
+          {techGroups.map((group, groupIndex) => (
+            <Reveal key={group.category} index={groupIndex}>
+              <div className="flex flex-col gap-2 border-b border-hairline pb-5 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
+                <h2 className="text-2xl font-semibold text-foreground">
+                  {group.category}
+                </h2>
+                <p className="text-sm text-muted-foreground sm:max-w-md sm:text-right">
+                  {group.intent}
+                </p>
+              </div>
+
+              <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                {group.techs.map((tech) => (
+                  <li
+                    key={tech.name}
+                    className="rounded-xl bg-surface p-5 ring-1 ring-hairline transition-colors duration-200 hover:ring-primary/30"
+                  >
+                    <h3 className="font-[family-name:var(--font-mono)] text-[0.8125rem] font-medium text-brand-lift">
+                      {tech.name}
+                    </h3>
+                    <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                      {tech.description}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          ))}
         </div>
-      </section>
+      </Section>
+
+      <Section tone="surface" space="default" divide="top">
+        <div className="max-w-3xl">
+          <h2 className="eyebrow">How we choose</h2>
+          <p className="mt-5 text-lg leading-relaxed text-foreground/90">
+            The stack follows the problem, not the other way around. If your
+            team already runs Python, we will not hand you a Node codebase
+            nobody can maintain. If a requirement is genuinely better served by
+            a tool we do not list here, we will say so rather than bend your
+            project to fit our habits.
+          </p>
+        </div>
+      </Section>
+
+      <CtaBand
+        title="Unsure what your project should be built on?"
+        description="Bring us the requirements and the constraints, including the skills your team already has. We will recommend a stack and explain the trade-offs behind it."
+        secondaryLabel="See our services"
+        secondaryHref="/services"
+      />
     </>
   )
 }

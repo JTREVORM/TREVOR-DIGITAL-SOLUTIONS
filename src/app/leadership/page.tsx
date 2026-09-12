@@ -1,257 +1,266 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowRight, Users, Target, Lightbulb, Shield, Handshake } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { PageHero } from "@/components/site/page-hero"
+import { Section, SectionHeading } from "@/components/site/section"
+import { Reveal } from "@/components/site/reveal"
+import { CtaBand } from "@/components/site/cta-band"
+import { contact, site } from "@/lib/site"
 
 export const metadata: Metadata = {
-  title: "Company Leadership | Trevor Digital Solutions",
-  description: "Learn about the leadership team at Trevor Digital Solutions. Led by Mwesigwa Trevor Joseph, our leadership drives innovation, excellence, and client success in software engineering.",
+  title: "Leadership",
+  description:
+    "How Trevor Digital Solutions is run: who is accountable for what, how technical decisions are made, and how client work is governed.",
   keywords: [
     "Trevor Digital Solutions leadership",
     "Mwesigwa Trevor Joseph CEO",
     "software company leadership Uganda",
     "technology leadership Kampala",
-    "company leadership Uganda",
-    "software engineering leadership",
   ],
   openGraph: {
-    title: "Company Leadership | Trevor Digital Solutions",
-    description: "Led by Mwesigwa Trevor Joseph, our leadership team drives innovation and excellence in software engineering across Uganda and Africa.",
+    title: "Leadership | Trevor Digital Solutions",
+    description:
+      "How the company is run, who is accountable for what, and how decisions are made.",
     url: "https://trevordigitalsolutions.com/leadership",
-    siteName: "Trevor Digital Solutions",
-    type: "website",
-    images: [
-      {
-        url: "/founder.png",
-        width: 1200,
-        height: 630,
-        alt: "Leadership at Trevor Digital Solutions",
-      },
-    ],
+    images: [{ url: "/founder.png", alt: "Leadership at Trevor Digital Solutions" }],
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Company Leadership | Trevor Digital Solutions",
-    description: "Led by Mwesigwa Trevor Joseph, our leadership team drives innovation and excellence in software engineering across Uganda and Africa.",
-    images: ["/founder.png"],
-  },
-  alternates: {
-    canonical: "https://trevordigitalsolutions.com/leadership",
-  },
+  alternates: { canonical: "https://trevordigitalsolutions.com/leadership" },
 }
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Trevor Digital Solutions",
-  url: "https://trevordigitalsolutions.com",
-  logo: "https://trevordigitalsolutions.com/logo.png",
-  founder: {
-    "@type": "Person",
-    name: "Mwesigwa Trevor Joseph",
-    jobTitle: "Founder & CEO",
-    url: "https://trevordigitalsolutions.com/founder",
-  },
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Kampala",
-    addressCountry: "UG",
-  },
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: "+256-740-081-305",
-    contactType: "customer service",
-    areaServed: "UG",
-    availableLanguage: "English",
-  },
-  sameAs: [
-    "https://linkedin.com/in/mwesigwa-trevor",
-    "https://github.com",
-    "https://wa.me/256740081305",
-  ],
-}
-
-const LEADERSHIP_VALUES = [
+/**
+ * Functions, not invented job titles. TDS is founder-led, and the honest
+ * description is which responsibilities are owned rather than an org chart
+ * of people who do not exist yet.
+ */
+const FUNCTIONS = [
   {
-    icon: Target,
-    title: "Vision-Driven Leadership",
+    id: "01",
+    title: "Strategy & client partnerships",
+    owner: "Founder & CEO",
     description:
-      "Our leadership sets a clear direction for the company — focusing on long-term innovation, sustainable growth, and delivering measurable impact for our clients.",
+      "Which work the company takes on, what it declines, and the direct relationship with every client. Scoping and commercial terms are agreed at this level, not delegated to a sales function.",
   },
   {
-    icon: Users,
-    title: "Client-Centric Culture",
+    id: "02",
+    title: "Technical direction",
+    owner: "Founder & CEO",
     description:
-      "Every decision starts with the client. We build teams and processes that prioritize understanding client needs and delivering exceptional outcomes.",
+      "Architecture decisions, stack selection and engineering standards. Decisions are made by someone who will also maintain the result, which keeps them conservative on purpose.",
   },
   {
-    icon: Lightbulb,
-    title: "Innovation First",
+    id: "03",
+    title: "Delivery & quality",
+    owner: "Founder & CEO",
     description:
-      "We encourage continuous learning and experimentation. Our leaders stay ahead of technology trends to keep the company competitive and future-ready.",
+      "Sprint planning, code review, testing standards and release readiness. Nothing ships to a client environment without review against the agreed scope.",
   },
   {
-    icon: Shield,
-    title: "Integrity & Excellence",
+    id: "04",
+    title: "Trading systems",
+    owner: "Founder & CEO",
     description:
-      "We uphold the highest standards of quality, transparency, and ethical business practices in every project and client relationship.",
-  },
-  {
-    icon: Handshake,
-    title: "Collaborative Environment",
-    description:
-      "Great software is built by great teams. We foster a collaborative culture where engineers, designers, and consultants work together seamlessly.",
+      "MetaTrader development, strategy specification, backtesting integrity and the reporting given to clients, favourable or not.",
   },
 ]
 
-const LEADERSHIP_TEAM = [
+const GOVERNANCE = [
   {
-    name: "Mwesigwa Trevor Joseph",
-    role: "Founder & CEO",
-    focus: "Overall strategy, technology vision, and client partnerships",
-    bio: "Software Engineer, Expert Advisor Developer, and Technology Consultant with 5+ years of experience building enterprise software solutions. Leads the company's technical direction and Forex trading systems division.",
+    title: "Decisions are traceable",
+    description:
+      "Architecture and scope decisions are written down with the reasoning behind them, so a choice can be revisited later by whoever inherits the system.",
+  },
+  {
+    title: "Nothing is promised twice",
+    description:
+      "Commitments to clients are made once, in writing, by the person accountable for delivering them. There is no gap between what was sold and what was scoped.",
+  },
+  {
+    title: "Bad news travels immediately",
+    description:
+      "A slipping timeline or a failed assumption is raised as soon as it is known, not at the deadline. Clients get time to react while reacting is still useful.",
+  },
+  {
+    title: "Growth follows capability",
+    description:
+      "The company adds people when the work genuinely requires it, not to appear larger. Overstated capacity is how agencies end up subcontracting work they cannot supervise.",
   },
 ]
 
 export default function LeadershipPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: site.name,
+    url: site.url,
+    logo: `${site.url}/logo.png`,
+    founder: {
+      "@type": "Person",
+      name: site.founder,
+      jobTitle: site.founderRole,
+      url: `${site.url}/founder`,
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Kampala",
+      addressCountry: "UG",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+256-740-081-305",
+      contactType: "customer service",
+      areaServed: "UG",
+      availableLanguage: "English",
+    },
+    sameAs: [contact.linkedin, contact.whatsapp],
+  }
+
   return (
     <>
-      {/* Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Hero */}
-      <section className="py-20 md:py-28 bg-secondary/20 relative overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="h-[16rem] w-[16rem] sm:h-[20rem] sm:w-[20rem] md:h-[24rem] md:w-[24rem] bg-primary/10 rounded-full blur-[80px] opacity-60" />
-        </div>
-        <div className="container mx-auto px-4 md:px-6 relative z-10 text-center">
-          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary mb-6">
-            Our Leadership
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
-            Company Leadership
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            At Trevor Digital Solutions, strong leadership is the foundation of everything we build. 
-            Our leadership team combines deep technical expertise with business acumen to deliver 
-            world-class software solutions.
-          </p>
-        </div>
-      </section>
-
-      {/* Leadership Team */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-12 text-center">
-            Meet Our Leadership
-          </h2>
-          <div className="max-w-4xl mx-auto">
-            {LEADERSHIP_TEAM.map((leader) => (
-              <div
-                key={leader.name}
-                className="p-8 md:p-10 rounded-3xl border border-border bg-card shadow-lg"
-              >
-                <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
-                  <div className="relative mx-auto md:mx-0 w-48 h-48 rounded-2xl overflow-hidden border-4 border-border shadow-xl shrink-0">
-                    <Image
-                      src="/founder.png"
-                      alt={leader.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  </div>
-                  <div className="text-center md:text-left">
-                    <h3 className="text-2xl font-bold mb-1">{leader.name}</h3>
-                    <p className="text-primary font-semibold text-lg mb-4">{leader.role}</p>
-                    <p className="text-sm text-muted-foreground mb-4">{leader.focus}</p>
-                    <p className="text-muted-foreground leading-relaxed">{leader.bio}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Leadership Values */}
-      <section className="py-20 bg-secondary/10">
-        <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-12 text-center">
-            What Drives Our Leadership
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {LEADERSHIP_VALUES.map((value) => (
-              <div
-                key={value.title}
-                className="p-6 rounded-2xl border border-border bg-card hover:border-primary/50 transition-colors group"
-              >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <value.icon className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">{value.title}</h3>
-                <p className="text-muted-foreground text-sm">{value.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Company Culture */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8 text-center">
-              Building a Culture of Excellence
-            </h2>
-            <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
-              <p>
-                Trevor Digital Solutions was founded on the principle that great software comes from great leadership. 
-                Under the guidance of <strong className="text-foreground">Mwesigwa Trevor Joseph</strong>, 
-                the company has cultivated a culture where technical excellence, client satisfaction, and continuous 
-                innovation are non-negotiable.
-              </p>
-              <p>
-                Our leadership believes in empowering every team member to take ownership, think critically, and 
-                deliver solutions that exceed expectations. This philosophy has enabled us to build lasting 
-                partnerships with 40+ clients and deliver 50+ successful projects across multiple industries.
-              </p>
-              <p>
-                From enterprise ERP systems and hospital management platforms to automated Forex trading systems 
-                and mobile applications, our leadership ensures that every engagement is managed with the same 
-                level of dedication, transparency, and technical rigor.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-primary/5 border-y border-border">
-        <div className="container mx-auto px-4 md:px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            Ready to Partner With Us?
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Experience leadership that delivers. Let&apos;s discuss your project and how Trevor Digital Solutions 
-            can help you achieve your business goals.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild>
+      <PageHero
+        eyebrow="Leadership"
+        title="Founder-led, and honest about it."
+        lead="Trevor Digital Solutions is led by its founder. That is a genuine advantage for clients — decisions happen in one conversation — and we describe it plainly rather than dressing it up as a department chart."
+        crumbs={[
+          { name: "Home", href: "/" },
+          { name: "About", href: "/about" },
+          { name: "Leadership" },
+        ]}
+        actions={
+          <>
+            <Button size="cta-lg" asChild>
               <Link href="/contact">
-                Get Free Consultation <ArrowRight className="ml-2 h-4 w-4" />
+                Start a Project
+                <ArrowRight aria-hidden />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/founder">About the Founder</Link>
+            <Button size="cta-lg" variant="outline" asChild>
+              <Link href="/founder">Founder profile</Link>
             </Button>
-          </div>
+          </>
+        }
+      />
+
+      {/* Who leads */}
+      <Section space="loose">
+        <div className="grid gap-10 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-16">
+          <Reveal>
+            <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-2xl bg-surface ring-1 ring-hairline lg:mx-0">
+              <Image
+                src="/founder.png"
+                alt={site.founder}
+                fill
+                sizes="(max-width: 1024px) 20rem, 18rem"
+                className="object-cover object-top"
+              />
+              <div
+                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent"
+                aria-hidden
+              />
+            </div>
+          </Reveal>
+
+          <Reveal index={1}>
+            <h2 className="eyebrow">Who leads</h2>
+            <p className="mt-5 text-2xl leading-snug font-semibold text-foreground sm:text-3xl">
+              {site.founder}
+            </p>
+            <p className="mt-2 text-brand-lift">{site.founderRole}</p>
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
+              Software engineer, MetaTrader expert advisor developer and
+              technology consultant. He holds accountability for strategy,
+              technical direction, delivery quality and the trading systems
+              work, and is the person a client deals with from first
+              conversation through to support after launch.
+            </p>
+            <Button size="cta" variant="outline" className="mt-8" asChild>
+              <Link href="/founder">
+                Full profile
+                <ArrowRight aria-hidden />
+              </Link>
+            </Button>
+          </Reveal>
         </div>
-      </section>
+      </Section>
+
+      {/* Accountability */}
+      <Section tone="surface" space="loose" divide="both">
+        <SectionHeading
+          eyebrow="Accountability"
+          title="Four functions, each with a named owner."
+          description="As the company grows these functions separate into distinct roles. Until they do, this is who is responsible for what."
+        />
+        <ol className="mt-14 grid gap-px overflow-hidden rounded-xl bg-hairline ring-1 ring-hairline sm:grid-cols-2">
+          {FUNCTIONS.map((item, index) => (
+            <Reveal as="li" key={item.id} index={index} className="bg-surface-raised">
+              <div className="h-full p-7 sm:p-8">
+                <div className="flex items-center gap-3">
+                  <span className="font-[family-name:var(--font-mono)] text-xs tracking-[0.12em] text-brand-lift">
+                    {item.id}
+                  </span>
+                  <span className="text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
+                    {item.owner}
+                  </span>
+                </div>
+                <h3 className="mt-4 text-lg font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                  {item.description}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </ol>
+      </Section>
+
+      {/* Governance */}
+      <Section space="loose">
+        <SectionHeading
+          eyebrow="How we run projects"
+          title="The rules we hold ourselves to."
+          description="Commitments about conduct rather than outcomes, because conduct is the part we fully control."
+        />
+        <ul className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:gap-x-16">
+          {GOVERNANCE.map((item, index) => (
+            <Reveal as="li" key={item.title} index={index}>
+              <h3 className="border-l-2 border-brand pl-5 text-lg font-semibold text-foreground">
+                {item.title}
+              </h3>
+              <p className="mt-3 pl-5 text-sm leading-relaxed text-muted-foreground">
+                {item.description}
+              </p>
+            </Reveal>
+          ))}
+        </ul>
+      </Section>
+
+      {/* Hiring note */}
+      <Section tone="surface" space="default" divide="top">
+        <div className="max-w-3xl">
+          <h2 className="text-2xl font-semibold text-foreground">
+            Interested in joining?
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+            We take on engineers as project volume justifies it, and we would
+            rather hear from someone early than advertise a role we are not
+            ready to fill. Send your work to{" "}
+            <a
+              href={contact.emailHref}
+              className="text-brand-lift underline-offset-4 hover:underline"
+            >
+              {contact.email}
+            </a>{" "}
+            &mdash; code we can read matters more than a CV.
+          </p>
+        </div>
+      </Section>
+
+      <CtaBand secondaryLabel="Read about TDS" secondaryHref="/about" />
     </>
   )
 }

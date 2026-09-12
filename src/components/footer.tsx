@@ -1,136 +1,161 @@
-"use client"
-
 import Link from "next/link"
-import { Globe, Mail, Phone, MapPin, ArrowUp } from "lucide-react"
-import { Button } from "@/components/ui/button"
-
-function BackToTop() {
-  return (
-    <button
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="p-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-full transition-colors"
-      aria-label="Back to top"
-    >
-      <ArrowUp className="h-5 w-5" />
-    </button>
-  )
-}
+import { Mail, MapPin, Phone } from "lucide-react"
+import { BrandLockup } from "@/components/site/logo"
+import { LinkedInIcon, WhatsAppIcon } from "@/components/site/social-icons"
+import { BackToTop } from "@/components/site/back-to-top"
+import { companyNav, contact, legalNav, site } from "@/lib/site"
+import { services } from "@/lib/content/services"
 
 export function Footer() {
+  const year = new Date().getFullYear()
+
   return (
-    <footer className="bg-background border-t border-border mt-auto pt-16 pb-8">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-12">
+    <footer className="mt-auto border-t border-hairline bg-surface">
+      <div className="shell py-16 lg:py-20">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-8">
           {/* Brand */}
-          <div className="space-y-4">
-            <h3 className="text-2xl font-bold tracking-tight text-primary">Trevor Digital Solutions</h3>
-            <p className="text-muted-foreground max-w-xs">
-              Transforming Ideas Into Powerful Digital Solutions
+          <div className="max-w-sm">
+            <BrandLockup variant="stacked" />
+            <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+              {site.tagline} We build custom software, business management
+              systems, websites, mobile applications, AI solutions and trading
+              technologies from {site.location}.
             </p>
-            <p className="text-sm text-muted-foreground">
-              Founded by Mwesigwa Trevor Joseph<br />
-              Kampala, Uganda
-            </p>
-            <div className="flex items-center gap-3 pt-2">
+            <div className="mt-6 flex items-center gap-2">
               <a
-                href="https://wa.me/256740081305"
+                href={contact.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-                aria-label="WhatsApp"
+                className="inline-flex size-10 items-center justify-center rounded-lg text-muted-foreground ring-1 ring-hairline transition-colors hover:bg-primary/10 hover:text-brand-lift"
+                aria-label="Chat with us on WhatsApp"
               >
-                <Phone className="h-5 w-5" />
+                <WhatsAppIcon className="size-4" />
               </a>
               <a
-                href="mailto:trevordigitalsolutions@gmail.com"
-                className="text-muted-foreground hover:text-primary transition-colors"
-                aria-label="Email"
+                href={contact.emailHref}
+                className="inline-flex size-10 items-center justify-center rounded-lg text-muted-foreground ring-1 ring-hairline transition-colors hover:bg-primary/10 hover:text-brand-lift"
+                aria-label="Email us"
               >
-                <Mail className="h-5 w-5" />
+                <Mail className="size-4" aria-hidden />
               </a>
               <a
-                href="https://linkedin.com/in/mwesigwa-trevor"
+                href={contact.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-                aria-label="LinkedIn"
+                className="inline-flex size-10 items-center justify-center rounded-lg text-muted-foreground ring-1 ring-hairline transition-colors hover:bg-primary/10 hover:text-brand-lift"
+                aria-label="LinkedIn profile"
               >
-                <Globe className="h-5 w-5" />
+                <LinkedInIcon className="size-4" />
               </a>
             </div>
           </div>
+
+          {/* Services */}
+          <nav aria-labelledby="footer-services">
+            <h2 id="footer-services" className="eyebrow mb-5">
+              Services
+            </h2>
+            <ul className="space-y-3 text-sm">
+              {services.map((service) => (
+                <li key={service.slug}>
+                  <Link
+                    href={`/services/${service.slug}`}
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {service.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Company */}
+          <nav aria-labelledby="footer-company">
+            <h2 id="footer-company" className="eyebrow mb-5">
+              Company
+            </h2>
+            <ul className="space-y-3 text-sm">
+              {companyNav.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/projects"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Projects
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/technologies"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Technologies
+                </Link>
+              </li>
+            </ul>
+          </nav>
 
           {/* Contact */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-foreground">Contact</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-primary shrink-0" />
-                <a href="tel:+256740081305" className="hover:text-primary transition-colors">
-                  +256 740 081 305
+          <div>
+            <h2 className="eyebrow mb-5">Contact</h2>
+            <ul className="space-y-4 text-sm">
+              <li>
+                <a
+                  href={contact.phoneHref}
+                  className="flex items-start gap-3 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <Phone className="mt-0.5 size-4 shrink-0 text-brand-lift" aria-hidden />
+                  {contact.phone}
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-primary shrink-0" />
-                <a href="mailto:trevordigitalsolutions@gmail.com" className="hover:text-primary transition-colors break-all">
-                  trevordigitalsolutions@gmail.com
+              <li>
+                <a
+                  href={contact.emailHref}
+                  className="flex items-start gap-3 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <Mail className="mt-0.5 size-4 shrink-0 text-brand-lift" aria-hidden />
+                  <span className="break-all">{contact.email}</span>
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-primary shrink-0" />
-                <span>Kampala, Uganda</span>
+              <li className="flex items-start gap-3 text-muted-foreground">
+                <MapPin className="mt-0.5 size-4 shrink-0 text-brand-lift" aria-hidden />
+                {site.location}
               </li>
             </ul>
-            <div className="pt-2">
-              <Button size="sm" className="w-full" asChild>
-                <a href="https://wa.me/256740081305" target="_blank" rel="noopener noreferrer">
-                  Chat on WhatsApp
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-foreground">Quick Links</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
-              <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
-              <li><Link href="/founder" className="hover:text-primary transition-colors">Founder</Link></li>
-              <li><Link href="/leadership" className="hover:text-primary transition-colors">Leadership</Link></li>
-              <li><Link href="/services" className="hover:text-primary transition-colors">Services</Link></li>
-              <li><Link href="/projects" className="hover:text-primary transition-colors">Projects</Link></li>
-              <li><Link href="/technologies" className="hover:text-primary transition-colors">Technologies</Link></li>
-              <li><Link href="/testimonials" className="hover:text-primary transition-colors">Testimonials</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-foreground">Legal</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms-of-service" className="hover:text-primary transition-colors">Terms of Service</Link></li>
-            </ul>
-
-            <div className="pt-4">
-              <h4 className="text-sm font-semibold text-foreground mb-2">Services</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="/services/custom-software-development" className="hover:text-primary transition-colors">Custom Software</Link></li>
-                <li><Link href="/services/web-development" className="hover:text-primary transition-colors">Web Applications</Link></li>
-                <li><Link href="/services/mobile-app-development" className="hover:text-primary transition-colors">Mobile Apps</Link></li>
-                <li><Link href="/services/forex-expert-advisors" className="hover:text-primary transition-colors">Forex EAs</Link></li>
-              </ul>
-            </div>
+            <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
+              {site.hours}
+            </p>
           </div>
         </div>
+      </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Trevor Digital Solutions. All Rights Reserved.</p>
-          <p className="text-xs">Built with ❤️ in Kampala, Uganda</p>
-          <BackToTop />
+      {/* Bottom bar */}
+      <div className="border-t border-hairline">
+        <div className="shell flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-muted-foreground">
+            &copy; {year} {site.name}. All rights reserved.
+          </p>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            {legalNav.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.name}
+              </Link>
+            ))}
+            <BackToTop />
+          </div>
         </div>
       </div>
     </footer>

@@ -1,16 +1,17 @@
 import type { Metadata } from "next"
 import { HeroSection } from "@/components/sections/hero"
-import { AboutSection } from "@/components/sections/about"
-import { FounderSection } from "@/components/sections/founder"
 import { ServicesSection } from "@/components/sections/services"
+import { WhyTdsSection } from "@/components/sections/why-tds"
 import { ProjectsSection } from "@/components/sections/projects"
 import { TechnologiesSection } from "@/components/sections/technologies"
-import { TestimonialsSection } from "@/components/sections/testimonials"
-import { ContactSection } from "@/components/sections/contact"
+import { ProcessSection } from "@/components/sections/process"
+import { IndustriesSection } from "@/components/sections/industries"
+import { CtaBand } from "@/components/site/cta-band"
 
 export const metadata: Metadata = {
-  title: "Trevor Digital Solutions — Enterprise Software Engineering Company",
-  description: "Trevor Digital Solutions builds enterprise software, websites, mobile applications, automation systems, AI solutions, cloud software, and Forex trading technologies. Based in Kampala, Uganda.",
+  title: "Trevor Digital Solutions — Software Engineering Company in Uganda",
+  description:
+    "Trevor Digital Solutions builds custom software, business management systems, websites, mobile applications, AI solutions and trading technologies. Software engineering from Kampala, Uganda.",
   keywords: [
     "Trevor Digital Solutions",
     "Trevor Digital Solutions Uganda",
@@ -34,24 +35,26 @@ export const metadata: Metadata = {
     "Digital Solutions Uganda",
   ],
   openGraph: {
-    title: "Trevor Digital Solutions — Enterprise Software Engineering Company",
-    description: "Building powerful software solutions for modern businesses. Enterprise software, websites, mobile apps, automation, AI, and Forex trading technologies.",
+    title: "Trevor Digital Solutions — Software Engineering Company in Uganda",
+    description:
+      "We build the software behind better businesses: custom software, business management systems, websites, mobile applications, AI solutions and trading technologies.",
     url: "https://trevordigitalsolutions.com",
     siteName: "Trevor Digital Solutions",
     type: "website",
     images: [
       {
         url: "/logo.png",
-        width: 1200,
-        height: 630,
-        alt: "Trevor Digital Solutions - Enterprise Software Engineering",
+        width: 1536,
+        height: 1024,
+        alt: "Trevor Digital Solutions",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Trevor Digital Solutions — Enterprise Software Engineering Company",
-    description: "Building powerful software solutions for modern businesses. Enterprise software, websites, mobile apps, automation, AI, and Forex trading technologies.",
+    title: "Trevor Digital Solutions — Software Engineering Company in Uganda",
+    description:
+      "We build the software behind better businesses: custom software, business management systems, websites, mobile applications, AI solutions and trading technologies.",
     images: ["/logo.png"],
   },
   alternates: {
@@ -63,13 +66,13 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <AboutSection />
-      <FounderSection />
       <ServicesSection />
+      <WhyTdsSection />
       <ProjectsSection />
       <TechnologiesSection />
-      <TestimonialsSection />
-      <ContactSection />
+      <ProcessSection />
+      <IndustriesSection />
+      <CtaBand />
     </>
   )
 }

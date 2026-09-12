@@ -8,23 +8,23 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   const lastUpdated = "June 28, 2025"
   return (
-    <section className="py-16 md:py-24 bg-background">
-      <div className="container mx-auto px-4 md:px-6 max-w-4xl">
+    <section className="py-16 sm:py-20 lg:py-24">
+      <div className="shell max-w-3xl">
         <div className="mb-10">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">Privacy Policy</h1>
-          <p className="text-muted-foreground">Last updated: {lastUpdated}</p>
+          <h1 className="text-[2rem] leading-[1.1] font-semibold text-foreground sm:text-[2.5rem]">Privacy Policy</h1>
+          <p className="mt-4 font-[family-name:var(--font-mono)] text-xs tracking-[0.1em] text-muted-foreground uppercase">Last updated: {lastUpdated}</p>
         </div>
 
-        <div className="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-muted-foreground leading-relaxed">
+        <div className="space-y-10 text-[0.9375rem] leading-relaxed text-muted-foreground">
           <section>
-            <h2 className="text-2xl font-bold text-foreground mb-3">1. Introduction</h2>
+            <h2 className="mb-4 text-xl font-semibold text-foreground">1. Introduction</h2>
             <p>
               Trevor Digital Solutions (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website <strong>trevordigitalsolutions.com</strong> or use our services.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-foreground mb-3">2. Information We Collect</h2>
+            <h2 className="mb-4 text-xl font-semibold text-foreground">2. Information We Collect</h2>
             <p>We may collect the following types of information:</p>
             <ul className="list-disc pl-6 space-y-2 mt-3">
               <li><strong>Personal Information:</strong> Name, email address, phone number, company name when you submit our contact form.</li>
@@ -34,7 +34,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-foreground mb-3">3. How We Use Your Information</h2>
+            <h2 className="mb-4 text-xl font-semibold text-foreground">3. How We Use Your Information</h2>
             <p>We use the information we collect to:</p>
             <ul className="list-disc pl-6 space-y-2 mt-3">
               <li>Respond to your inquiries and provide requested services.</li>
@@ -45,14 +45,14 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-foreground mb-3">4. Data Storage and Security</h2>
+            <h2 className="mb-4 text-xl font-semibold text-foreground">4. Data Storage and Security</h2>
             <p>
               Your data is stored securely using Supabase, a platform with enterprise-grade security. We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-foreground mb-3">5. Third-Party Services</h2>
+            <h2 className="mb-4 text-xl font-semibold text-foreground">5. Third-Party Services</h2>
             <p>We may use third-party services including:</p>
             <ul className="list-disc pl-6 space-y-2 mt-3">
               <li><strong>Supabase</strong> — for database storage</li>
@@ -63,7 +63,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-foreground mb-3">6. Your Rights</h2>
+            <h2 className="mb-4 text-xl font-semibold text-foreground">6. Your Rights</h2>
             <p>You have the right to:</p>
             <ul className="list-disc pl-6 space-y-2 mt-3">
               <li>Access the personal data we hold about you.</li>
@@ -75,14 +75,14 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-foreground mb-3">7. Cookies</h2>
+            <h2 className="mb-4 text-xl font-semibold text-foreground">7. Cookies</h2>
             <p>
               Our website may use cookies to enhance your browsing experience. You can control cookie settings through your browser preferences.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-foreground mb-3">8. Contact Us</h2>
+            <h2 className="mb-4 text-xl font-semibold text-foreground">8. Contact Us</h2>
             <p>If you have questions about this Privacy Policy, please contact us:</p>
             <div className="mt-3 p-4 rounded-lg bg-card border border-border">
               <p><strong>Trevor Digital Solutions</strong></p>

@@ -1,29 +1,52 @@
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Home } from "lucide-react"
+import { primaryNav } from "@/lib/site"
 
 export default function NotFound() {
   return (
-    <div className="flex-1 flex items-center justify-center py-24">
-      <div className="text-center max-w-lg mx-auto px-4">
-        <div className="text-8xl md:text-9xl font-extrabold text-primary/20 mb-4 select-none">404</div>
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Page Not Found</h1>
-        <p className="text-lg text-muted-foreground mb-8">
-          The page you&apos;re looking for doesn&apos;t exist or has been moved. Let&apos;s get you back on track.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild>
-            <Link href="/">
-              <Home className="mr-2 h-4 w-4" /> Back to Home
-            </Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/contact">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Contact Us
-            </Link>
-          </Button>
+    <section className="relative flex flex-1 items-center overflow-hidden py-24 sm:py-32">
+      <div className="brand-wash-soft pointer-events-none absolute inset-0" aria-hidden />
+      <div className="shell relative">
+        <div className="max-w-xl">
+          <p className="eyebrow">Error 404</p>
+          <h1 className="mt-6 text-[2rem] leading-[1.1] font-semibold text-foreground sm:text-[2.75rem]">
+            That page does not exist.
+          </h1>
+          <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
+            The link may be out of date, or the address may have a typo in it.
+            Everything on the site is reachable from the pages below.
+          </p>
+
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <Button size="cta-lg" asChild>
+              <Link href="/">
+                Back to home
+                <ArrowRight aria-hidden />
+              </Link>
+            </Button>
+            <Button size="cta-lg" variant="outline" asChild>
+              <Link href="/contact">Contact us</Link>
+            </Button>
+          </div>
+
+          <nav aria-label="Site pages" className="mt-12 border-t border-hairline pt-8">
+            <p className="eyebrow mb-4">All pages</p>
+            <ul className="flex flex-wrap gap-x-6 gap-y-3">
+              {primaryNav.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

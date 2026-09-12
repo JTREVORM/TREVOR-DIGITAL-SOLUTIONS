@@ -1,320 +1,281 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowRight, Code2, TrendingUp, GraduationCap, Briefcase } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
+import { ArrowRight, Mail, Phone } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { PageHero } from "@/components/site/page-hero"
+import { Section, SectionHeading } from "@/components/site/section"
+import { Reveal } from "@/components/site/reveal"
+import { CtaBand } from "@/components/site/cta-band"
+import { LinkedInIcon, WhatsAppIcon } from "@/components/site/social-icons"
+import { contact, site } from "@/lib/site"
 
 export const metadata: Metadata = {
-  title: "Mwesigwa Trevor Joseph — Founder & CEO | Trevor Digital Solutions",
-  description: "Meet Mwesigwa Trevor Joseph, Founder & CEO of Trevor Digital Solutions. Software Engineer, Forex Expert Advisor Developer, and Technology Consultant based in Kampala, Uganda.",
+  title: "Founder",
+  description:
+    "Mwesigwa Trevor Joseph is a software engineer, MetaTrader expert advisor developer and technology consultant in Kampala, Uganda, and the founder of Trevor Digital Solutions.",
   keywords: [
     "Mwesigwa Trevor Joseph",
-    "Mwesigwa Trevor",
-    "Trevor Joseph",
-    "Founder of Trevor Digital Solutions",
-    "Software Engineer Uganda",
-    "Software Engineer Kampala",
-    "Forex Developer Uganda",
-    "EA Developer Uganda",
-    "MT4 Developer Uganda",
-    "MT5 Developer Uganda",
-    "Expert Advisor Developer",
-    "Algorithmic Trading Developer",
-    "Forex Expert Advisor Developer",
-    "MQL4 Developer",
-    "MQL5 Developer",
-    "Technology Consultant Uganda",
-    "Digital Entrepreneur Uganda",
-    "CEO Trevor Digital Solutions",
+    "Trevor Joseph founder",
+    "software engineer Uganda",
+    "Forex Expert Advisor Developer Uganda",
+    "MT4 developer Uganda",
+    "MT5 developer Uganda",
+    "technology consultant Kampala",
   ],
   openGraph: {
-    title: "Mwesigwa Trevor Joseph — Founder & CEO | Trevor Digital Solutions",
-    description: "Software Engineer, Forex Expert Advisor Developer, and Technology Consultant. Founder of Trevor Digital Solutions in Kampala, Uganda.",
+    title: "Mwesigwa Trevor Joseph | Founder, Trevor Digital Solutions",
+    description:
+      "Software engineer, MetaTrader expert advisor developer and technology consultant in Kampala, Uganda.",
     url: "https://trevordigitalsolutions.com/founder",
-    siteName: "Trevor Digital Solutions",
-    type: "website",
-    images: [
-      {
-        url: "/founder.png",
-        width: 1200,
-        height: 630,
-        alt: "Mwesigwa Trevor Joseph - Founder & CEO of Trevor Digital Solutions",
-      },
-    ],
+    images: [{ url: "/founder.png", alt: "Mwesigwa Trevor Joseph" }],
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Mwesigwa Trevor Joseph — Founder & CEO | Trevor Digital Solutions",
-    description: "Software Engineer, Forex Expert Advisor Developer, and Technology Consultant. Founder of Trevor Digital Solutions in Kampala, Uganda.",
-    images: ["/founder.png"],
-  },
-  alternates: {
-    canonical: "https://trevordigitalsolutions.com/founder",
-  },
+  alternates: { canonical: "https://trevordigitalsolutions.com/founder" },
 }
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Mwesigwa Trevor Joseph",
-  givenName: "Mwesigwa",
-  familyName: "Trevor Joseph",
-  jobTitle: "Founder & CEO",
-  worksFor: {
-    "@type": "Organization",
-    name: "Trevor Digital Solutions",
-    url: "https://trevordigitalsolutions.com",
-  },
-  url: "https://trevordigitalsolutions.com/founder",
-  image: "https://trevordigitalsolutions.com/founder.png",
-  description:
-    "Mwesigwa Trevor Joseph is a Software Engineer, Expert Advisor Developer, Technology Consultant, and Digital Entrepreneur. Founder of Trevor Digital Solutions based in Kampala, Uganda.",
-  sameAs: [
-    "https://linkedin.com/in/mwesigwa-trevor",
-    "https://github.com",
-    "https://wa.me/256740081305",
-  ],
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Kampala",
-    addressCountry: "UG",
-  },
-  knowsAbout: [
-    "Software Engineering",
-    "Custom Software Development",
-    "Web Development",
-    "Mobile App Development",
-    "Forex Expert Advisor Development",
-    "MQL4",
-    "MQL5",
-    "Algorithmic Trading",
-    "MetaTrader 4",
-    "MetaTrader 5",
-    "ERP Development",
-    "Business Management Systems",
-    "Cloud Solutions",
-    "AI Integration",
-    "Technology Consulting",
-  ],
-}
-
-const ACHIEVEMENTS = [
+/** Areas of hands-on engineering work. */
+const PRACTICE_AREAS = [
   {
-    icon: Briefcase,
-    title: "Founded Trevor Digital Solutions",
-    description: "Established a leading software engineering company in Kampala, Uganda, delivering enterprise solutions to clients across Africa and beyond.",
+    title: "Software engineering",
+    description:
+      "Full-stack delivery across the lifecycle: data modelling, backend services, interfaces and deployment. Primarily TypeScript, React, Next.js, Node.js and Python on PostgreSQL.",
+    stack: ["TypeScript", "React", "Next.js", "Node.js", "Python", "PostgreSQL"],
   },
   {
-    icon: TrendingUp,
-    title: "Forex & Trading Systems Expert",
-    description: "Developed professional Expert Advisors (EAs) for MetaTrader 4 and 5, custom indicators, and automated trading systems for traders worldwide.",
+    title: "Trading technologies",
+    description:
+      "Automated trading systems for MetaTrader 4 and 5: expert advisors coded to a documented strategy, custom indicators, backtesting and risk management modules.",
+    stack: ["MQL4", "MQL5", "MetaTrader 4", "MetaTrader 5", "Python"],
   },
   {
-    icon: Code2,
-    title: "50+ Enterprise Projects Delivered",
-    description: "Led the design and delivery of over 50 enterprise software solutions including ERPs, hospital management systems, analytics dashboards, and trading platforms.",
+    title: "Business systems",
+    description:
+      "ERP, inventory, CRM and sector-specific management systems, including the process mapping and data migration that decide whether they get adopted.",
+    stack: ["ERP", "Inventory", "CRM", "Reporting", "Data migration"],
   },
   {
-    icon: GraduationCap,
-    title: "Continuous Innovation",
-    description: "Committed to staying at the forefront of technology trends — from AI and cloud infrastructure to cross-platform mobile development and algorithmic trading.",
+    title: "Cloud & consulting",
+    description:
+      "Deployment pipelines, infrastructure and architecture review, plus advisory work for organisations deciding what to build, buy or retire.",
+    stack: ["AWS", "Google Cloud", "Docker", "Kubernetes", "Terraform"],
   },
-]
-
-const SKILLS = [
-  { category: "Software Development", items: ["Next.js", "React", "TypeScript", "Node.js", "Python", "Flutter", "PostgreSQL"] },
-  { category: "Forex & Trading", items: ["MQL4", "MQL5", "MetaTrader 4", "MetaTrader 5", "Algorithmic Trading", "Backtesting"] },
-  { category: "Enterprise Systems", items: ["ERP Development", "CRM Systems", "Inventory Management", "Business Intelligence"] },
-  { category: "Cloud & DevOps", items: ["AWS", "Google Cloud", "Docker", "Kubernetes", "CI/CD", "Terraform"] },
 ]
 
 export default function FounderPage() {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: site.founder,
+    jobTitle: site.founderRole,
+    url: `${site.url}/founder`,
+    image: `${site.url}/founder.png`,
+    worksFor: {
+      "@type": "Organization",
+      name: site.name,
+      url: site.url,
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Kampala",
+      addressCountry: "UG",
+    },
+    knowsAbout: [
+      "Software engineering",
+      "Custom software development",
+      "Business management systems",
+      "MetaTrader expert advisor development",
+      "Algorithmic trading",
+      "Cloud infrastructure",
+    ],
+    sameAs: [contact.linkedin, contact.whatsapp],
+  }
+
   return (
     <>
-      {/* Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
 
-      {/* Hero */}
-      <section className="py-20 md:py-28 bg-secondary/20 relative overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="h-[16rem] w-[16rem] sm:h-[20rem] sm:w-[20rem] md:h-[24rem] md:w-[24rem] bg-primary/10 rounded-full blur-[80px] opacity-60" />
-        </div>
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-            <div>
-              <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary mb-6">
-                About the Founder
-              </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
-                Meet Mwesigwa Trevor Joseph
-              </h1>
-              <p className="text-xl text-muted-foreground mb-4">
-                Founder & CEO of Trevor Digital Solutions
-              </p>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Software Engineer, Expert Advisor Developer, Technology Consultant, and Digital Entrepreneur based in Kampala, Uganda.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" asChild>
-                  <Link href="/contact">
-                    Get Free Consultation <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" asChild>
-                  <Link href="/services">View Our Services</Link>
-                </Button>
-              </div>
-            </div>
-            <div className="relative mx-auto w-full max-w-md aspect-square rounded-3xl overflow-hidden border-4 border-border shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent z-10" />
-              <Image
-                src="/founder.png"
-                alt="Mwesigwa Trevor Joseph"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Biography */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8 text-center">
-              The Journey of a Software Engineer & Entrepreneur
-            </h2>
-            <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
-              <p>
-                Mwesigwa Trevor Joseph is a seasoned <strong className="text-foreground">Software Engineer</strong>, 
-                <strong className="text-foreground"> Expert Advisor Developer</strong>, 
-                <strong className="text-foreground"> Technology Consultant</strong>, and 
-                <strong className="text-foreground"> Digital Entrepreneur</strong> based in Kampala, Uganda. 
-                With a passion for building powerful, scalable software solutions, he has dedicated his career to helping 
-                businesses leverage technology for growth and transformation.
-              </p>
-              <p>
-                His expertise spans the full software development lifecycle — from architecting enterprise-grade backend 
-                systems and designing intuitive frontend interfaces to deploying robust cloud infrastructure. He has 
-                successfully delivered over <strong className="text-foreground">50 enterprise projects</strong> for clients 
-                across finance, healthcare, logistics, and trading sectors.
-              </p>
-              <p>
-                In the Forex and trading technology space, Mwesigwa Trevor Joseph is recognized as a leading 
-                <strong className="text-foreground"> Expert Advisor (EA) Developer</strong> in Uganda. He specializes in 
-                building automated trading systems for MetaTrader 4 (MT4) and MetaTrader 5 (MT5), including custom EAs, 
-                indicators, and algorithmic trading strategies using MQL4 and MQL5. His trading systems are designed with 
-                rigorous backtesting, risk management protocols, and real-time market data integration.
-              </p>
-              <p>
-                He founded <strong className="text-foreground">Trevor Digital Solutions</strong> with the vision of 
-                empowering businesses through innovative software engineering, automation, cloud solutions, and digital 
-                innovation. Under his leadership, the company has grown to serve 40+ clients across Africa and beyond, 
-                delivering custom software, web applications, mobile apps, ERP systems, hospital management software, 
-                and Forex trading technologies.
-              </p>
-              <p>
-                As a <strong className="text-foreground">Technology Consultant</strong>, Mwesigwa Trevor Joseph advises 
-                organizations on digital transformation strategies, cloud migration, system architecture, and emerging 
-                technologies such as AI and automation. His client-centric approach and commitment to excellence have 
-                made him a trusted partner for businesses seeking reliable, future-proof software solutions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Achievements */}
-      <section className="py-20 bg-secondary/10">
-        <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-12 text-center">
-            Key Achievements & Expertise
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {ACHIEVEMENTS.map((item) => (
-              <div key={item.title} className="p-6 rounded-2xl border border-border bg-card hover:border-primary/50 transition-colors group">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <item.icon className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                <p className="text-muted-foreground text-sm">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Skills */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-12 text-center">
-            Technical Skills & Specializations
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {SKILLS.map((skillGroup) => (
-              <div key={skillGroup.category} className="p-6 rounded-2xl border border-border bg-card">
-                <h3 className="text-xl font-bold mb-4 text-primary">{skillGroup.category}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {skillGroup.items.map((skill) => (
-                    <span
-                      key={skill}
-                      className="text-sm font-medium bg-secondary text-secondary-foreground px-3 py-1.5 rounded-full"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Philosophy */}
-      <section className="py-20 bg-primary/5 border-y border-border">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">
-              Leadership Philosophy
-            </h2>
-            <blockquote className="text-2xl md:text-3xl font-medium text-foreground mb-8 leading-relaxed">
-              &ldquo;Technology should solve real problems. I build software that transforms businesses, 
-              automates the mundane, and empowers people to achieve more than they thought possible.&rdquo;
-            </blockquote>
-            <p className="text-lg text-muted-foreground">
-              — Mwesigwa Trevor Joseph
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 md:px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            Want to work with Trevor Digital Solutions?
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Whether you need custom software, a Forex trading system, or a complete digital transformation — 
-            let&apos;s discuss how we can help your business grow.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild>
+      <PageHero
+        eyebrow="Founder"
+        title="Mwesigwa Trevor Joseph"
+        lead="Software engineer, MetaTrader expert advisor developer and technology consultant, working from Kampala, Uganda. He founded Trevor Digital Solutions to do client software the way he thought it should be done."
+        crumbs={[
+          { name: "Home", href: "/" },
+          { name: "About", href: "/about" },
+          { name: "Founder" },
+        ]}
+        actions={
+          <>
+            <Button size="cta-lg" asChild>
               <Link href="/contact">
-                Start a Project <ArrowRight className="ml-2 h-4 w-4" />
+                Start a Project
+                <ArrowRight aria-hidden />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/about">About Our Company</Link>
+            <Button size="cta-lg" variant="outline" asChild>
+              <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="size-[1.125rem]" />
+                WhatsApp
+              </a>
             </Button>
-          </div>
+          </>
+        }
+      />
+
+      {/* Portrait + profile */}
+      <Section space="loose">
+        <div className="grid gap-12 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-16">
+          <Reveal>
+            <div className="lg:sticky lg:top-28">
+              <div className="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-2xl bg-surface ring-1 ring-hairline lg:mx-0">
+                <Image
+                  src="/founder.png"
+                  alt={site.founder}
+                  fill
+                  sizes="(max-width: 1024px) 24rem, 20rem"
+                  loading="eager"
+                  fetchPriority="high"
+                  className="object-cover object-top"
+                />
+                <div
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent"
+                  aria-hidden
+                />
+              </div>
+
+              <div className="mx-auto mt-6 max-w-sm rounded-xl bg-surface p-5 ring-1 ring-hairline lg:mx-0">
+                <p className="eyebrow">Get in touch</p>
+                <ul className="mt-4 space-y-3 text-sm">
+                  <li>
+                    <a
+                      href={contact.phoneHref}
+                      className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <Phone className="size-4 shrink-0 text-brand-lift" aria-hidden />
+                      {contact.phone}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href={contact.emailHref}
+                      className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <Mail className="size-4 shrink-0 text-brand-lift" aria-hidden />
+                      <span className="break-all">{contact.email}</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href={contact.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <LinkedInIcon className="size-4 shrink-0 text-brand-lift" />
+                      LinkedIn
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal index={1} className="min-w-0">
+            <h2 className="eyebrow">Profile</h2>
+            <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground">
+              <p className="text-lg text-foreground/90">
+                Trevor works across the whole software lifecycle rather than one
+                layer of it: the conversation that establishes what a business
+                needs, the data model underneath, the interface on top, and the
+                infrastructure it runs on.
+              </p>
+              <p>
+                That range came from the kind of work available in Kampala, where
+                a client rarely wants a specialist for one slice of a system.
+                They want the system. It means the architecture decisions get
+                made by someone who will also have to maintain the result, which
+                tends to produce more conservative and more durable choices.
+              </p>
+              <p>
+                In trading technology he specialises in MetaTrader 4 and 5
+                development: expert advisors written to a documented strategy in
+                MQL4 and MQL5, custom indicators, backtesting and risk
+                management. The discipline there is unforgiving, because an
+                ambiguous rule becomes a losing trade rather than a support
+                ticket, and it shaped how he specifies requirements everywhere
+                else.
+              </p>
+              <p>
+                He founded {site.name} to take on client work with that
+                approach: understand the business before proposing software,
+                scope it in writing, build it to be maintained, and remain
+                responsible for it afterwards. As a consultant he also advises
+                organisations on architecture, cloud migration and where
+                automation or AI genuinely earns its cost &mdash; including when
+                the honest answer is that a project should not be built.
+              </p>
+            </div>
+          </Reveal>
         </div>
-      </section>
+      </Section>
+
+      {/* Practice areas */}
+      <Section tone="surface" space="loose" divide="both">
+        <SectionHeading
+          eyebrow="Practice areas"
+          title="Where the hands-on work happens."
+          description="Four areas of direct engineering work, each with the tools used day to day."
+        />
+        <ul className="mt-14 grid gap-px overflow-hidden rounded-xl bg-hairline ring-1 ring-hairline sm:grid-cols-2">
+          {PRACTICE_AREAS.map((area, index) => (
+            <Reveal as="li" key={area.title} index={index} className="bg-surface-raised">
+              <div className="h-full p-7 sm:p-8">
+                <h3 className="text-lg font-semibold text-foreground">{area.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                  {area.description}
+                </p>
+                <ul className="mt-5 flex flex-wrap gap-2">
+                  {area.stack.map((item) => (
+                    <li
+                      key={item}
+                      className="rounded-md px-2 py-1 font-[family-name:var(--font-mono)] text-[0.6875rem] text-muted-foreground ring-1 ring-hairline"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          ))}
+        </ul>
+      </Section>
+
+      {/* Approach */}
+      <Section space="loose">
+        <div className="max-w-3xl">
+          <h2 className="eyebrow">Approach</h2>
+          <p className="mt-6 text-xl leading-relaxed text-foreground sm:text-2xl">
+            Software rarely fails for purely technical reasons. It usually fails
+            because the wrong thing was agreed to build.
+          </p>
+          <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+            That is why discovery is treated as engineering work here rather than
+            a sales formality, why scope is written down before development
+            starts, and why a client occasionally gets told their project is not
+            worth building. It is a slower way to win work and a considerably
+            cheaper way to deliver it.
+          </p>
+        </div>
+      </Section>
+
+      <CtaBand
+        title="Work directly with the founder."
+        description="Early-stage conversations, architecture reviews and project scoping happen with Trevor himself, not a sales team."
+        secondaryLabel="Read about TDS"
+        secondaryHref="/about"
+      />
     </>
   )
 }

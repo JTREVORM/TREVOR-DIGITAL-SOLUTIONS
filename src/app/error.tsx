@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
+import { RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Home, RefreshCw } from "lucide-react"
+import { contact } from "@/lib/site"
 
 export default function Error({
   error,
@@ -12,24 +13,55 @@ export default function Error({
   reset: () => void
 }) {
   return (
-    <div className="flex-1 flex items-center justify-center py-24">
-      <div className="text-center max-w-lg mx-auto px-4">
-        <div className="text-8xl md:text-9xl font-extrabold text-destructive/20 mb-4 select-none">500</div>
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Something Went Wrong</h1>
-        <p className="text-lg text-muted-foreground mb-8">
-          We encountered an unexpected error. Please try again or contact us if the problem persists.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button onClick={reset}>
-            <RefreshCw className="mr-2 h-4 w-4" /> Try Again
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/">
-              <Home className="mr-2 h-4 w-4" /> Back to Home
-            </Link>
-          </Button>
+    <section className="relative flex flex-1 items-center overflow-hidden py-24 sm:py-32">
+      <div className="brand-wash-soft pointer-events-none absolute inset-0" aria-hidden />
+      <div className="shell relative">
+        <div className="max-w-xl">
+          <p className="eyebrow">Unexpected error</p>
+          <h1 className="mt-6 text-[2rem] leading-[1.1] font-semibold text-foreground sm:text-[2.75rem]">
+            Something went wrong on our side.
+          </h1>
+          <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
+            This is our fault, not yours. Try again, and if it keeps happening
+            let us know &mdash; we would rather hear about it than not.
+          </p>
+
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <Button size="cta-lg" onClick={reset}>
+              <RefreshCw aria-hidden />
+              Try again
+            </Button>
+            <Button size="cta-lg" variant="outline" asChild>
+              <Link href="/">Back to home</Link>
+            </Button>
+          </div>
+
+          <div className="mt-12 border-t border-hairline pt-8">
+            <p className="text-sm text-muted-foreground">
+              Still stuck? Email{" "}
+              <a
+                href={contact.emailHref}
+                className="text-brand-lift underline-offset-4 hover:underline"
+              >
+                {contact.email}
+              </a>{" "}
+              or call{" "}
+              <a
+                href={contact.phoneHref}
+                className="text-brand-lift underline-offset-4 hover:underline"
+              >
+                {contact.phone}
+              </a>
+              .
+            </p>
+            {error.digest ? (
+              <p className="mt-4 font-[family-name:var(--font-mono)] text-xs text-muted-foreground/60">
+                Reference: {error.digest}
+              </p>
+            ) : null}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

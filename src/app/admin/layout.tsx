@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { LayoutDashboard, FolderKanban, Wrench, MessageSquare, Settings, LogOut, Star, Image as ImageIcon } from "lucide-react"
@@ -14,7 +13,13 @@ export default async function AdminLayout({
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/admin/login")
+    // This layout wraps /admin/login too, so redirecting here sent that page
+    // into an infinite redirect loop (ERR_TOO_MANY_REDIRECTS) and made it
+    // impossible to sign in. Authentication is enforced in src/proxy.ts,
+    // which redirects every /admin/* request except /admin/login, so an
+    // unauthenticated request only reaches this point on the login page
+    // itself. Render it bare, without the dashboard chrome.
+    return <>{children}</>
   }
 
   return (

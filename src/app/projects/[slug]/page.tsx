@@ -2,231 +2,273 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import { ArrowRight, Check, ExternalLink, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CheckCircle2, ArrowRight, ArrowLeft, Phone, ExternalLink } from "lucide-react"
-
-type Project = {
-  slug: string
-  title: string
-  category: string
-  description: string
-  longDescription: string
-  client?: string
-  industry: string
-  technologies: string[]
-  features: string[]
-  benefits: string[]
-  image: string
-  gallery: string[]
-  projectUrl?: string
-}
-
-const PROJECTS_DATA: Record<string, Project> = {
-  "enterprise-analytics-dashboard": {
-    slug: "enterprise-analytics-dashboard",
-    title: "Enterprise SaaS Analytics Dashboard",
-    category: "Business Management System",
-    description: "A comprehensive analytics platform for enterprise data visualization and reporting.",
-    longDescription: "We built a full-featured SaaS analytics dashboard for a fast-growing enterprise client. The platform aggregates data from multiple sources, provides real-time visualizations, and generates automated reports for decision makers at every level of the organization. The system handles millions of data points and delivers insights in milliseconds thanks to careful database optimization and caching strategies.",
-    industry: "Finance & Analytics",
-    technologies: ["Next.js 14", "Supabase", "Tailwind CSS", "Recharts", "TypeScript", "Vercel"],
-    features: ["Real-time data visualization", "Automated report generation", "Multi-user access control", "Custom KPI dashboards", "Data export (CSV, PDF, Excel)", "Mobile responsive", "Dark/Light mode", "Alert notifications"],
-    benefits: ["Reduced reporting time by 80%", "Increased data accuracy to 99.9%", "Saved 15+ hours per week in manual work", "Enabled data-driven decision making", "Improved team collaboration"],
-    image: "/project1.png",
-    gallery: ["/project1.png", "/project2.png", "/project1.png"],
-  },
-  "global-erp-inventory-system": {
-    slug: "global-erp-inventory-system",
-    title: "Global Inventory & ERP System",
-    category: "ERP & Inventory Management",
-    description: "A centralized ERP for managing global supply chains, inventory, and operations.",
-    longDescription: "This enterprise resource planning system was built for a client managing inventory across multiple warehouses and locations globally. It integrates procurement, stock management, order fulfillment, and financial tracking into one unified platform accessible from anywhere in the world.",
-    industry: "Logistics & Supply Chain",
-    technologies: ["React", "Node.js", "PostgreSQL", "Docker", "Redis", "Nginx"],
-    features: ["Multi-warehouse management", "Real-time stock tracking", "Purchase order automation", "Supplier management", "Barcode/QR scanning", "Financial reporting", "User roles & permissions", "Audit trails"],
-    benefits: ["Eliminated stockouts by 95%", "Reduced procurement costs by 30%", "Full audit trail and compliance", "Eliminated 200+ hours of manual work monthly", "Real-time visibility across all locations"],
-    image: "/project2.png",
-    gallery: ["/project2.png", "/project1.png", "/project2.png"],
-  },
-  "hospital-management-system": {
-    slug: "hospital-management-system",
-    title: "Hospital Management System",
-    category: "Healthcare Software",
-    description: "A complete digital solution for patient records, appointments, billing, and clinical workflows.",
-    longDescription: "A comprehensive hospital management system built for a medical center in Kampala. The system digitizes all patient records, automates appointment scheduling, manages billing and insurance, and provides doctors with real-time access to patient history.",
-    industry: "Healthcare",
-    technologies: ["React", "Node.js", "PostgreSQL", "TypeScript", "Docker"],
-    features: ["Electronic patient records", "Appointment scheduling", "Billing & payments", "Lab results management", "Pharmacy management", "Staff scheduling", "Insurance claims", "Reporting & analytics"],
-    benefits: ["Eliminated paper records", "Reduced appointment no-shows by 60%", "Faster billing cycle", "Improved patient satisfaction", "Full regulatory compliance"],
-    image: "/project1.png",
-    gallery: ["/project1.png", "/project2.png"],
-  },
-  "forex-trading-dashboard": {
-    slug: "forex-trading-dashboard",
-    title: "Forex Trading Dashboard",
-    category: "Forex & Trading Systems",
-    description: "Real-time Forex trading dashboard with automated EA management and portfolio analytics.",
-    longDescription: "A sophisticated Forex trading management platform that provides traders with real-time market data, automated EA deployment, portfolio analytics, and risk management tools — all in one unified dashboard.",
-    industry: "Finance & Trading",
-    technologies: ["MQL5", "Python", "React", "WebSockets", "PostgreSQL"],
-    features: ["Real-time market data", "EA management dashboard", "Portfolio analytics", "Risk management", "Trade history", "P&L reporting", "Multiple account management", "Alerts & notifications"],
-    benefits: ["24/7 automated trading", "Eliminated emotional trading decisions", "Improved risk management", "Complete trade history", "Multi-account portfolio view"],
-    image: "/project2.png",
-    gallery: ["/project2.png", "/project1.png"],
-  },
-}
+import { Section } from "@/components/site/section"
+import { CtaBand } from "@/components/site/cta-band"
+import { projectBySlug, projects } from "@/lib/content/projects"
+import { contact, site } from "@/lib/site"
 
 type Props = { params: Promise<{ slug: string }> }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const project = PROJECTS_DATA[slug]
-  if (!project) return { title: "Project Not Found" }
-  return {
-    title: project.title,
-    description: project.description,
-    openGraph: {
-      title: `${project.title} | Trevor Digital Solutions`,
-      description: project.description,
-      url: `https://trevordigitalsolutions.com/projects/${project.slug}`,
-      images: [{ url: project.image }],
-    },
-  }
+export async function generateStaticParams() {
+  return projects.map((project) => ({ slug: project.slug }))
 }
 
-export async function generateStaticParams() {
-  return Object.keys(PROJECTS_DATA).map((slug) => ({ slug }))
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const project = projectBySlug.get(slug)
+  if (!project) return { title: "Project not found" }
+
+  return {
+    title: project.title,
+    description: project.summary,
+    openGraph: {
+      title: `${project.title} | ${site.name}`,
+      description: project.summary,
+      url: `${site.url}/projects/${project.slug}`,
+      images: [{ url: project.image }],
+    },
+    alternates: { canonical: `${site.url}/projects/${project.slug}` },
+  }
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
   const { slug } = await params
-  const project = PROJECTS_DATA[slug]
+  const project = projectBySlug.get(slug)
   if (!project) notFound()
+
+  const others = projects.filter((item) => item.slug !== project.slug).slice(0, 3)
+
+  /** Facts we can state without inventing anything. */
+  const facts = [
+    { label: "Category", value: project.category },
+    { label: "Industry", value: project.industry },
+    ...(project.client ? [{ label: "Client", value: project.client }] : []),
+    ...(project.year ? [{ label: "Delivered", value: project.year }] : []),
+  ]
 
   return (
     <>
-      {/* Hero */}
-      <section className="py-16 bg-secondary/20">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="mb-6">
-            <Button variant="ghost" size="sm" asChild className="gap-2 text-muted-foreground hover:text-foreground">
-              <Link href="/projects">
-                <ArrowLeft className="h-4 w-4" /> All Projects
-              </Link>
-            </Button>
-          </div>
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-xs font-semibold uppercase tracking-wider text-primary bg-primary/10 px-3 py-1 rounded-full">
-                  {project.category}
-                </span>
-                <span className="text-xs text-muted-foreground">{project.industry}</span>
-              </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">{project.title}</h1>
-              <p className="text-lg text-muted-foreground mb-6">{project.description}</p>
-              <div className="flex flex-wrap gap-2 mb-6">
-                {project.technologies.map((tech) => (
-                  <span key={tech} className="text-xs font-medium bg-secondary text-secondary-foreground px-2.5 py-1 rounded-full">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <div className="flex gap-3">
-                <Button asChild>
+      {/* Masthead */}
+      <section className="relative overflow-hidden border-b border-hairline bg-surface pt-14 pb-16 sm:pt-16 sm:pb-20">
+        <div className="brand-wash-soft pointer-events-none absolute inset-0" aria-hidden />
+        <div className="shell relative">
+          <nav aria-label="Breadcrumb" className="mb-8">
+            <ol className="flex flex-wrap items-center gap-1.5 text-[0.8125rem] text-muted-foreground">
+              <li>
+                <Link href="/" className="transition-colors hover:text-foreground">
+                  Home
+                </Link>
+              </li>
+              <li aria-hidden>/</li>
+              <li>
+                <Link href="/projects" className="transition-colors hover:text-foreground">
+                  Projects
+                </Link>
+              </li>
+              <li aria-hidden>/</li>
+              <li className="text-foreground">{project.title}</li>
+            </ol>
+          </nav>
+
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+            <div className="min-w-0">
+              <span className="inline-flex rounded-md bg-primary/10 px-2.5 py-1 font-[family-name:var(--font-mono)] text-[0.625rem] tracking-[0.12em] text-brand-lift uppercase ring-1 ring-primary/20">
+                {project.category}
+              </span>
+              <h1 className="mt-5 text-[2rem] leading-[1.1] font-semibold text-foreground sm:text-[2.5rem] lg:text-[2.75rem]">
+                {project.title}
+              </h1>
+              <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
+                {project.summary}
+              </p>
+
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <Button size="cta-lg" asChild>
                   <Link href="/contact">
-                    Request Similar Project <ArrowRight className="ml-2 h-4 w-4" />
+                    Request something similar
+                    <ArrowRight aria-hidden />
                   </Link>
                 </Button>
-                {project.projectUrl && (
-                  <Button variant="outline" asChild>
+                {project.projectUrl ? (
+                  <Button size="cta-lg" variant="outline" asChild>
                     <a href={project.projectUrl} target="_blank" rel="noopener noreferrer">
-                      View Live <ExternalLink className="ml-2 h-4 w-4" />
+                      View live
+                      <ExternalLink aria-hidden />
                     </a>
                   </Button>
-                )}
+                ) : null}
               </div>
             </div>
-            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border shadow-2xl">
+
+            <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-background ring-1 ring-hairline">
               <Image
                 src={project.image}
-                alt={project.title}
+                alt={`${project.title} interface`}
                 fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-                priority
+                sizes="(max-width: 1024px) 100vw, 620px"
+                loading="eager"
+                fetchPriority="high"
+                className="object-cover object-center"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Details */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="grid lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2">
-              <h2 className="text-2xl font-bold mb-4">Project Overview</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-10">{project.longDescription}</p>
+      <Section space="loose">
+        <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
+          {/* Main column */}
+          <div className="min-w-0">
+            <h2 className="eyebrow">The project</h2>
+            <p className="mt-5 text-lg leading-relaxed text-foreground/90">
+              {project.overview}
+            </p>
 
-              {/* Features */}
-              <h3 className="text-xl font-bold mb-4">Key Features</h3>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-10">
-                {project.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <span>{f}</span>
+            <h2 className="mt-16 text-2xl font-semibold text-foreground">
+              What the system does
+            </h2>
+            <ul className="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+              {project.capabilities.map((capability) => (
+                <li
+                  key={capability}
+                  className="flex items-start gap-3 text-sm text-muted-foreground"
+                >
+                  <Check className="mt-0.5 size-4 shrink-0 text-brand-lift" aria-hidden />
+                  {capability}
+                </li>
+              ))}
+            </ul>
+
+            {project.gallery.length > 0 ? (
+              <>
+                <h2 className="mt-16 text-2xl font-semibold text-foreground">Interface</h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Representative screens. Full walkthroughs are published with the
+                  case study.
+                </p>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  {project.gallery.map((image, i) => (
+                    <div
+                      key={`${image}-${i}`}
+                      className="relative aspect-[4/3] overflow-hidden rounded-xl bg-background ring-1 ring-hairline"
+                    >
+                      <Image
+                        src={image}
+                        alt={`${project.title} screen ${i + 1}`}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 420px"
+                        className="object-cover object-center"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : null}
+          </div>
+
+          {/* Sidebar */}
+          <aside className="space-y-6 lg:sticky lg:top-28 lg:self-start">
+            <div className="rounded-xl bg-surface p-6 ring-1 ring-hairline">
+              <h2 className="eyebrow">Project detail</h2>
+              <dl className="mt-5 space-y-4">
+                {facts.map((fact) => (
+                  <div key={fact.label}>
+                    <dt className="text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
+                      {fact.label}
+                    </dt>
+                    <dd className="mt-1 text-sm text-foreground">{fact.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <div className="rounded-xl bg-surface p-6 ring-1 ring-hairline">
+              <h2 className="eyebrow">Built with</h2>
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {project.technologies.map((tech) => (
+                  <li
+                    key={tech}
+                    className="rounded-md px-2.5 py-1.5 font-[family-name:var(--font-mono)] text-[0.6875rem] text-muted-foreground ring-1 ring-hairline"
+                  >
+                    {tech}
                   </li>
                 ))}
               </ul>
-
-              {/* Gallery */}
-              {project.gallery.length > 0 && (
-                <>
-                  <h3 className="text-xl font-bold mb-4">Project Gallery</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {project.gallery.map((img, i) => (
-                      <div key={i} className="relative aspect-video rounded-xl overflow-hidden border border-border">
-                        <Image src={img} alt={`${project.title} screenshot ${i + 1}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
-              <div className="p-6 rounded-2xl border border-border bg-card">
-                <h3 className="font-bold text-lg mb-4">Business Benefits</h3>
-                <ul className="space-y-3">
-                  {project.benefits.map((b) => (
-                    <li key={b} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="rounded-xl bg-surface p-6 ring-1 ring-hairline">
+              <h2 className="eyebrow">What it changed</h2>
+              <ul className="mt-5 space-y-3">
+                {project.outcomes.map((outcome) => (
+                  <li
+                    key={outcome}
+                    className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground"
+                  >
+                    <Check className="mt-0.5 size-3.5 shrink-0 text-brand-lift" aria-hidden />
+                    {outcome}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-              <div className="p-6 rounded-2xl border border-primary/30 bg-primary/5">
-                <h3 className="font-bold text-lg mb-2">Want something similar?</h3>
-                <p className="text-sm text-muted-foreground mb-4">We can build a similar solution tailored to your business needs.</p>
-                <Button className="w-full gap-2 mb-3" asChild>
+            <div className="edge-light rounded-xl bg-surface-raised p-6 ring-1 ring-primary/20">
+              <h2 className="text-base font-semibold text-foreground">
+                Want something like this?
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                We can scope an equivalent system for your business.
+              </p>
+              <div className="mt-5 flex flex-col gap-2.5">
+                <Button size="cta" className="w-full" asChild>
                   <Link href="/contact">
-                    Request a Quote <ArrowRight className="h-4 w-4" />
+                    Request a quote
+                    <ArrowRight aria-hidden />
                   </Link>
                 </Button>
-                <Button variant="outline" className="w-full gap-2" asChild>
-                  <a href="tel:+256740081305">
-                    <Phone className="h-4 w-4" /> Call Us Now
+                <Button size="cta" variant="outline" className="w-full" asChild>
+                  <a href={contact.phoneHref}>
+                    <Phone aria-hidden />
+                    Call us
                   </a>
                 </Button>
               </div>
             </div>
-          </div>
+          </aside>
         </div>
-      </section>
+      </Section>
+
+      {/* Other work */}
+      <Section tone="surface" space="default" divide="top">
+        <h2 className="text-2xl font-semibold text-foreground">Other projects</h2>
+        <ul className="mt-8 grid gap-px overflow-hidden rounded-xl bg-hairline ring-1 ring-hairline sm:grid-cols-3">
+          {others.map((item) => (
+            <li key={item.slug} className="bg-surface-raised">
+              <Link
+                href={`/projects/${item.slug}`}
+                className="group flex h-full flex-col p-6 transition-colors hover:bg-surface"
+              >
+                <span className="font-[family-name:var(--font-mono)] text-[0.625rem] tracking-[0.12em] text-brand-lift uppercase">
+                  {item.industry}
+                </span>
+                <h3 className="mt-3 flex-1 text-[0.9375rem] leading-snug font-semibold text-foreground">
+                  {item.title}
+                </h3>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-[0.8125rem] text-brand-lift">
+                  View
+                  <ArrowRight
+                    className="size-3.5 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden
+                  />
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <CtaBand secondaryLabel="All projects" secondaryHref="/projects" />
     </>
   )
 }
