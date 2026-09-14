@@ -69,6 +69,7 @@ if (listError) {
 
 let user = list.users.find((u) => u.email?.toLowerCase() === email.toLowerCase())
 let created = false
+let passwordChanged = false
 
 if (!user) {
   const { data, error } = await admin.auth.admin.createUser({
@@ -82,6 +83,17 @@ if (!user) {
   }
   user = data.user
   created = true
+} else if (passwordArg) {
+  // Existing account: only touch the password when one was supplied, so a
+  // plain promotion never silently changes someone's credentials.
+  const { error } = await admin.auth.admin.updateUserById(user.id, {
+    password: passwordArg,
+  })
+  if (error) {
+    console.error("Could not update the password:", error.message)
+    process.exit(1)
+  }
+  passwordChanged = true
 }
 
 // The handle_new_user trigger creates the profile with the lowest role;
@@ -98,9 +110,18 @@ if (roleError) {
   process.exit(1)
 }
 
-console.log(created ? "Created admin user:" : "Existing user promoted to admin:")
+console.log(
+  created
+    ? "Created admin user:"
+    : passwordChanged
+      ? "Password updated, role confirmed as admin:"
+      : "Existing user confirmed as admin:"
+)
 console.log("  email:", user.email)
 if (created) {
   console.log("  password:", password)
   console.log("\nSign in at /admin/login and change this password.")
+}
+if (passwordChanged) {
+  console.log("  password: (set from the value you supplied)")
 }
