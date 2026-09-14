@@ -1,12 +1,21 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { requireSupabaseConfig } from './config'
 
 export async function createClient() {
+  // `cookies()` must be awaited BEFORE any other work that can throw. Reading
+  // cookies is what opts the calling route into dynamic rendering; throwing
+  // ahead of it makes Next try to prerender admin pages at build time, and the
+  // build then fails on machines without Supabase credentials.
   const cookieStore = await cookies()
 
+  // Fails with a message that names the missing variables and what to do,
+  // rather than the SDK's generic "URL and Key are required" error.
+  const { url, anonKey } = requireSupabaseConfig()
+
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    anonKey,
     {
       cookies: {
         getAll() {

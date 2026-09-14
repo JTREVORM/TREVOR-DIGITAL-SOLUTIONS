@@ -726,3 +726,135 @@ export const footerServiceSlugs = [
   "mobile-app-development",
   "erp-development",
 ] as const
+
+/* ==========================================================================
+   Service categories
+   --------------------------------------------------------------------------
+   The six areas a client actually shops by. Each category groups one or more
+   of the service pages above; every slug belongs to exactly one category, so
+   nothing is listed twice and no route changes.
+
+   Each category answers the three questions a buyer has before they enquire:
+   what this is, what it fixes, and what we can actually build.
+   ========================================================================== */
+
+export type ServiceCategory = {
+  id: string
+  name: string
+  icon: LucideIcon
+  /** What this area is, in one sentence. */
+  what: string
+  /** The business problem it addresses. */
+  problem: string
+  /** Concrete things TDS can build in this area. */
+  builds: string[]
+  /** Detail pages that sit under this category. */
+  slugs: string[]
+}
+
+export const serviceCategories: ServiceCategory[] = [
+  {
+    id: "software-development",
+    name: "Software Development",
+    icon: Code2,
+    what: "Systems designed and built from scratch around one organisation's way of working.",
+    problem:
+      "The process has outgrown spreadsheets and shared folders, and the packaged products on the market each solve part of the job while breaking another part.",
+    builds: [
+      "Custom software built to a documented process",
+      "Internal tools and staff-facing platforms",
+      "Customer-facing web platforms",
+      "Replacement or modernisation of legacy systems",
+      "Reporting and analytics layers over existing data",
+    ],
+    slugs: ["custom-software-development"],
+  },
+  {
+    id: "web-mobile",
+    name: "Web & Mobile",
+    icon: Smartphone,
+    what: "Company websites, web applications and Android/iOS apps, built mobile-first.",
+    problem:
+      "Customers search on a phone, on mobile data, and leave if a site is slow, unreadable or invisible to Google. An app that assumes constant connectivity fails the moment someone walks into a basement.",
+    builds: [
+      "Professional company websites",
+      "Web applications with accounts, dashboards and payments",
+      "Android and iOS apps from one Flutter codebase",
+      "Offline-first apps for field and branch staff",
+      "Technical SEO, performance and Core Web Vitals work",
+    ],
+    slugs: ["web-development", "mobile-app-development"],
+  },
+  {
+    id: "business-systems",
+    name: "Business Systems",
+    icon: Database,
+    what: "The operational systems an organisation runs on day to day: money, stock, members and customers.",
+    problem:
+      "Figures disagree between departments, stock cannot be trusted, member or customer records live in three places, and closing the month means a week of manual reconciliation.",
+    builds: [
+      "SACCO and financial management systems",
+      "Loan, savings and member record systems",
+      "Inventory, stock control and point of sale",
+      "CRM and customer operations platforms",
+      "Custom management platforms for a specific sector",
+      "Role-based access, audit trails and reporting",
+    ],
+    slugs: ["erp-development"],
+  },
+  {
+    id: "ai-automation",
+    name: "AI & Automation",
+    icon: BrainCircuit,
+    what: "Narrow, measurable automation of the repetitive work that consumes staff time.",
+    problem:
+      "People spend hours re-keying invoices, answering the same handful of questions, sorting records by hand and copying data between systems that do not talk to each other.",
+    builds: [
+      "AI-powered applications built on your own data",
+      "Document and invoice processing",
+      "Support and internal assistants",
+      "Intelligent workflows and routing rules",
+      "Business process automation between systems",
+    ],
+    slugs: ["ai-integrations"],
+  },
+  {
+    id: "trading-technology",
+    name: "Trading Technology",
+    icon: BarChart3,
+    what: "Automated trading systems and tooling for the MetaTrader platforms.",
+    problem:
+      "A strategy that works on paper is executed inconsistently by hand, and running several accounts means checking each terminal separately to find out what happened.",
+    builds: [
+      "Forex expert advisors for MT4 and MT5",
+      "Custom indicators in MQL4 and MQL5",
+      "Backtesting, optimisation and honest reporting",
+      "Risk and money management modules",
+      "Trading dashboards and multi-account monitoring",
+    ],
+    slugs: ["forex-expert-advisors"],
+  },
+  {
+    id: "cloud-integration",
+    name: "Cloud & Integration",
+    icon: Cloud,
+    what: "The plumbing underneath: how systems are deployed, monitored, and connected to each other.",
+    problem:
+      "Releases are risky, outages are discovered by customers, backups have never been tested, and separate systems are kept in step by someone typing the same data twice.",
+    builds: [
+      "REST and GraphQL APIs",
+      "Database design, migration and tuning",
+      "Cloud deployment and release pipelines",
+      "Third-party integrations: payments, mobile money, SMS",
+      "Monitoring, backups and tested recovery",
+    ],
+    slugs: ["cloud-solutions", "api-development"],
+  },
+]
+
+/** Services belonging to a category, in catalogue order. */
+export function servicesInCategory(category: ServiceCategory): Service[] {
+  return category.slugs
+    .map((slug) => serviceBySlug.get(slug))
+    .filter((service): service is Service => Boolean(service))
+}

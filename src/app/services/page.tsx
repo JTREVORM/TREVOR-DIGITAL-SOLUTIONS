@@ -6,15 +6,17 @@ import { PageHero } from "@/components/site/page-hero"
 import { Section } from "@/components/site/section"
 import { Reveal } from "@/components/site/reveal"
 import { CtaBand } from "@/components/site/cta-band"
-import { services } from "@/lib/content/services"
+import { serviceCategories, servicesInCategory } from "@/lib/content/services"
 
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Custom software development, web applications, mobile apps, business management systems, trading technologies, AI and automation, cloud infrastructure and API integration from Trevor Digital Solutions.",
+    "Software development, web and mobile, business systems including SACCO and inventory platforms, AI and automation, trading technology, and cloud and integration work from Trevor Digital Solutions.",
   keywords: [
     "software development services Uganda",
     "custom software Uganda",
+    "SACCO management system Uganda",
+    "inventory management system Uganda",
     "ERP development Uganda",
     "mobile app development Kampala",
     "API integration Uganda",
@@ -23,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Services | Trevor Digital Solutions",
     description:
-      "Eight engineering disciplines: custom software, web, mobile, business systems, trading technologies, AI, cloud and APIs.",
+      "Six areas of work: software development, web and mobile, business systems, AI and automation, trading technology, cloud and integration.",
     url: "https://trevordigitalsolutions.com/services",
   },
   alternates: { canonical: "https://trevordigitalsolutions.com/services" },
@@ -34,8 +36,8 @@ export default function ServicesPage() {
     <>
       <PageHero
         eyebrow="Services"
-        title="Engineering disciplines, not packages."
-        lead="We do not sell tiers. Every engagement starts with the problem you actually have, and the work is scoped from there. These are the areas we work in."
+        title="Six areas of work. One way of working."
+        lead="We do not sell packages or tiers. Every engagement starts with the problem you actually have, gets scoped in writing, and is priced before development begins. These are the areas we build in."
         crumbs={[{ name: "Home", href: "/" }, { name: "Services" }]}
         actions={
           <>
@@ -50,61 +52,130 @@ export default function ServicesPage() {
             </Button>
           </>
         }
-      />
+      >
+        {/* Jump list: six areas is enough to warrant one. */}
+        <nav aria-label="Service areas">
+          <p className="eyebrow mb-4">Jump to</p>
+          <ul className="flex flex-wrap gap-2">
+            {serviceCategories.map((category) => (
+              <li key={category.id}>
+                <a
+                  href={`#${category.id}`}
+                  className="inline-flex items-center gap-2 rounded-lg bg-surface-raised px-3.5 py-2 text-[0.8125rem] font-medium text-muted-foreground ring-1 ring-hairline transition-colors hover:text-foreground hover:ring-primary/35"
+                >
+                  <category.icon className="size-3.5 text-brand-lift" aria-hidden />
+                  {category.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </PageHero>
 
-      <Section space="loose">
-        <ul className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-          {services.map((service, index) => (
-            <Reveal as="li" key={service.slug} index={index} className="h-full">
-              <Link
-                href={`/services/${service.slug}`}
-                className="group flex h-full flex-col rounded-xl bg-surface p-7 ring-1 ring-hairline transition-colors duration-200 hover:bg-surface-raised hover:ring-primary/40 sm:p-8"
-              >
-                <div className="flex items-start gap-5">
-                  <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
-                    <service.icon className="size-[1.375rem]" aria-hidden />
+      {/* One band per category, alternating surface so the six read as
+          distinct sections rather than one long scroll. */}
+      {serviceCategories.map((category, index) => {
+        const pages = servicesInCategory(category)
+
+        return (
+          <Section
+            key={category.id}
+            id={category.id}
+            tone={index % 2 === 0 ? "base" : "surface"}
+            space="loose"
+            divide={index % 2 === 0 ? "none" : "both"}
+            className="scroll-mt-24"
+          >
+            <div className="grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
+              {/* What it is, and what it fixes */}
+              <Reveal>
+                <div className="flex items-center gap-4">
+                  <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-brand-lift ring-1 ring-primary/20">
+                    <category.icon className="size-[1.375rem]" aria-hidden />
                   </span>
-                  <div className="min-w-0">
-                    <h2 className="text-xl leading-snug font-semibold text-foreground">
-                      {service.title}
-                    </h2>
-                    <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                      {service.summary}
-                    </p>
-                  </div>
+                  <span className="font-[family-name:var(--font-mono)] text-xs tracking-[0.14em] text-muted-foreground/70 uppercase">
+                    {String(index + 1).padStart(2, "0")} / Service area
+                  </span>
                 </div>
 
-                <ul className="mt-7 grid flex-1 gap-2.5 border-t border-hairline pt-6 sm:grid-cols-2">
-                  {service.highlights.map((highlight) => (
-                    <li
-                      key={highlight}
-                      className="flex items-start gap-2.5 text-[0.8125rem] text-muted-foreground"
-                    >
-                      <Check
-                        className="mt-0.5 size-3.5 shrink-0 text-brand-lift"
-                        aria-hidden
-                      />
-                      {highlight}
-                    </li>
-                  ))}
-                </ul>
+                <h2 className="mt-6 text-[1.75rem] leading-[1.15] font-semibold text-foreground sm:text-[2.25rem]">
+                  {category.name}
+                </h2>
+                <p className="mt-5 text-base leading-relaxed text-foreground/90 sm:text-lg">
+                  {category.what}
+                </p>
 
-                <span className="mt-7 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-brand-lift">
-                  Service details
-                  <ArrowUpRight
-                    className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    aria-hidden
-                  />
-                </span>
-              </Link>
-            </Reveal>
-          ))}
-        </ul>
-      </Section>
+                <div className="mt-8 border-l-2 border-brand/60 pl-5">
+                  <p className="eyebrow mb-2.5">The problem</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {category.problem}
+                  </p>
+                </div>
+
+                <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                  <Button size="cta" asChild>
+                    <Link href="/contact">
+                      Discuss a {category.name.toLowerCase()} project
+                      <ArrowRight aria-hidden />
+                    </Link>
+                  </Button>
+                </div>
+              </Reveal>
+
+              {/* What we can build, and the detail pages */}
+              <Reveal index={1}>
+                <div className="rounded-2xl bg-surface-raised p-7 ring-1 ring-hairline sm:p-8">
+                  <h3 className="eyebrow">What we build</h3>
+                  <ul className="mt-6 grid gap-3">
+                    {category.builds.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-3 text-sm leading-relaxed text-foreground/90"
+                      >
+                        <Check className="mt-0.5 size-4 shrink-0 text-brand-lift" aria-hidden />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {pages.length > 0 ? (
+                    <div className="mt-8 border-t border-hairline pt-7">
+                      <h3 className="eyebrow mb-4">Detail</h3>
+                      <ul className="grid gap-3">
+                        {pages.map((service) => (
+                          <li key={service.slug}>
+                            <Link
+                              href={`/services/${service.slug}`}
+                              className="group flex items-start justify-between gap-4 rounded-lg bg-surface p-4 ring-1 ring-hairline transition-colors hover:ring-primary/40"
+                            >
+                              <span className="min-w-0">
+                                <span className="block text-[0.9375rem] font-semibold text-foreground">
+                                  {service.title}
+                                </span>
+                                <span className="mt-1 block text-[0.8125rem] leading-relaxed text-muted-foreground">
+                                  {service.summary}
+                                </span>
+                              </span>
+                              <ArrowUpRight
+                                className="mt-0.5 size-4 shrink-0 text-brand-lift transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                                aria-hidden
+                              />
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
+              </Reveal>
+            </div>
+          </Section>
+        )
+      })}
 
       <CtaBand
         title="Not sure which of these you need?"
-        description="Describe the problem rather than the solution. We will tell you what it would take to fix, which service that falls under, and whether it is worth building at all."
+        description="Describe the problem rather than the solution. We will tell you what it would take to fix, which area it falls under, and whether it is worth building at all."
         primaryLabel="Start a Project"
         secondaryLabel="See the stack"
         secondaryHref="/technologies"

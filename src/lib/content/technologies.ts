@@ -1,6 +1,20 @@
+import {
+  Cloud,
+  Database,
+  LineChart,
+  Monitor,
+  Server,
+  Smartphone,
+  type LucideIcon,
+} from "lucide-react"
+
 /**
  * The technology stack, grouped by discipline. Shared by the homepage
  * technologies section and the /technologies page.
+ *
+ * This list is deliberately conservative: it names only what the company
+ * actually builds with. Adding a technology here is a capability claim, so
+ * nothing goes in that TDS would not be comfortable being asked about.
  */
 
 export type Technology = {
@@ -10,6 +24,7 @@ export type Technology = {
 
 export type TechGroup = {
   category: string
+  icon: LucideIcon
   /** Short line explaining why this group matters to a client. */
   intent: string
   techs: Technology[]
@@ -18,6 +33,7 @@ export type TechGroup = {
 export const techGroups: TechGroup[] = [
   {
     category: "Frontend",
+    icon: Monitor,
     intent: "The interface your customers and staff actually touch.",
     techs: [
       { name: "React", description: "Component-based user interface library." },
@@ -28,6 +44,7 @@ export const techGroups: TechGroup[] = [
   },
   {
     category: "Backend",
+    icon: Server,
     intent: "The logic, rules and processing behind the interface.",
     techs: [
       { name: "Node.js", description: "JavaScript runtime for APIs and services." },
@@ -37,7 +54,8 @@ export const techGroups: TechGroup[] = [
     ],
   },
   {
-    category: "Databases",
+    category: "Database",
+    icon: Database,
     intent: "Where your records live, and how safely they are kept.",
     techs: [
       { name: "PostgreSQL", description: "Relational database for transactional business data." },
@@ -48,6 +66,7 @@ export const techGroups: TechGroup[] = [
   },
   {
     category: "Mobile",
+    icon: Smartphone,
     intent: "Android and iOS from one maintained codebase.",
     techs: [
       { name: "Flutter", description: "Cross-platform framework for Android and iOS." },
@@ -57,17 +76,8 @@ export const techGroups: TechGroup[] = [
     ],
   },
   {
-    category: "Trading systems",
-    intent: "Automated trading built to a documented strategy.",
-    techs: [
-      { name: "MQL5", description: "Language for MetaTrader 5 expert advisors and indicators." },
-      { name: "MQL4", description: "Language for MetaTrader 4 expert advisors and indicators." },
-      { name: "MetaTrader 5", description: "Current-generation trading and backtesting platform." },
-      { name: "MetaTrader 4", description: "Long-established retail trading platform." },
-    ],
-  },
-  {
     category: "Cloud & DevOps",
+    icon: Cloud,
     intent: "How software gets deployed, watched and recovered.",
     techs: [
       { name: "AWS", description: "Amazon Web Services infrastructure and managed services." },
@@ -76,6 +86,17 @@ export const techGroups: TechGroup[] = [
       { name: "Kubernetes", description: "Container orchestration for services at scale." },
       { name: "Terraform", description: "Infrastructure defined as reviewable code." },
       { name: "Vercel", description: "Deployment platform optimised for Next.js." },
+    ],
+  },
+  {
+    category: "Trading Technology",
+    icon: LineChart,
+    intent: "Automated trading built to a documented strategy.",
+    techs: [
+      { name: "MQL4", description: "Language for MetaTrader 4 expert advisors and indicators." },
+      { name: "MQL5", description: "Language for MetaTrader 5 expert advisors and indicators." },
+      { name: "MetaTrader 4", description: "Long-established retail trading platform." },
+      { name: "MetaTrader 5", description: "Current-generation trading and backtesting platform." },
     ],
   },
 ]

@@ -1,12 +1,18 @@
 import {
   Banknote,
+  BookOpen,
   Building2,
   FileCode2,
   GraduationCap,
   HeartPulse,
+  Layers,
+  LifeBuoy,
   LineChart,
   MessageSquare,
+  Plug,
+  Puzzle,
   Radio,
+  Repeat,
   ShieldCheck,
   ShoppingCart,
   Truck,
@@ -145,6 +151,85 @@ export const industries: Industry[] = [
 /**
  * Company principles shown on the About page.
  */
+/**
+ * The problems clients actually arrive with, stated in their words rather
+ * than ours. Used on the About page.
+ */
+export type Problem = {
+  title: string
+  description: string
+  icon: LucideIcon
+}
+
+export const problemsWeSolve: Problem[] = [
+  {
+    title: "The spreadsheets have stopped coping",
+    description:
+      "Several versions of the same file, figures that disagree between departments, and a month-end close that takes a week of manual reconciliation.",
+    icon: Layers,
+  },
+  {
+    title: "Nothing talks to anything else",
+    description:
+      "Sales, accounting and stock each hold their own copy of the truth, kept in step by staff re-typing the same data into three systems.",
+    icon: Plug,
+  },
+  {
+    title: "Off-the-shelf software does not fit",
+    description:
+      "The package solves two thirds of the job and blocks the rest, and the vendor's roadmap has no interest in the way your organisation actually works.",
+    icon: Puzzle,
+  },
+  {
+    title: "Records live on paper",
+    description:
+      "Files that take minutes to retrieve, cannot be searched, cannot be backed up, and give no reliable picture of what happened last quarter.",
+    icon: FileCode2,
+  },
+  {
+    title: "Staff time goes on repetitive work",
+    description:
+      "Hours each week spent re-keying invoices, answering identical questions and moving data between systems by hand.",
+    icon: Repeat,
+  },
+  {
+    title: "A previous build was abandoned",
+    description:
+      "A system half-finished by someone who is no longer reachable, undocumented, and now nobody is willing to touch it.",
+    icon: Wrench,
+  },
+]
+
+/**
+ * What happens after launch. The part most proposals leave vague.
+ */
+export const supportCommitments = [
+  {
+    title: "The handover is real",
+    description:
+      "Source code, repository history, deployment configuration and documentation, transferred on completion. You are never dependent on us to keep operating.",
+    icon: FileCode2,
+  },
+  {
+    title: "Your team is trained",
+    description:
+      "Hands-on sessions with the people who will use the system daily, plus written guides so someone hired next year can be brought up to speed.",
+    icon: BookOpen,
+  },
+  {
+    title: "Problems have an owner",
+    description:
+      "Monitoring and alerting are configured before go-live, with a documented route for reporting a fault and a named person responsible for it.",
+    icon: LifeBuoy,
+  },
+  {
+    title: "The system keeps evolving",
+    description:
+      "Maintenance, security updates and new features as real usage reveals what matters. Launch is a milestone in the work, not the end of it.",
+    icon: Repeat,
+  },
+] as const
+
 export const coreValues = [
   {
     title: "Say what is true",
