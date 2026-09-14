@@ -31,6 +31,7 @@ export const primaryNav = [
   { name: "Services", href: "/services" },
   { name: "Projects", href: "/projects" },
   { name: "Technologies", href: "/technologies" },
+  { name: "Insights", href: "/insights" },
   { name: "Contact", href: "/contact" },
 ] as const
 

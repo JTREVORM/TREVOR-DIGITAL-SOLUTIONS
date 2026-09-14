@@ -101,6 +101,14 @@ export function Footer() {
                   Technologies
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/insights"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Insights
+                </Link>
+              </li>
             </ul>
           </nav>
 

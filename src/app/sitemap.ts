@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 import { services } from "@/lib/content/services"
 import { projects } from "@/lib/content/projects"
+import { getVisibleArticles, insightCategories } from "@/lib/content/insights"
 import { site } from "@/lib/site"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -12,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/services", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/projects", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/technologies", priority: 0.7, changeFrequency: "monthly" as const },
+    { path: "/insights", priority: 0.8, changeFrequency: "weekly" as const },
     { path: "/contact", priority: 0.8, changeFrequency: "yearly" as const },
     { path: "/founder", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/leadership", priority: 0.6, changeFrequency: "yearly" as const },
@@ -41,5 +43,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  return [...pages, ...servicePages, ...projectPages]
+  const articlePages: MetadataRoute.Sitemap = getVisibleArticles().map((article) => ({
+    url: `${site.url}/insights/${article.slug}`,
+    lastModified: new Date(`${article.updatedDate ?? article.publishedDate}T00:00:00Z`),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }))
+
+  const categoryPages: MetadataRoute.Sitemap = insightCategories.map((category) => ({
+    url: `${site.url}/insights/category/${category.slug}`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.5,
+  }))
+
+  return [
+    ...pages,
+    ...servicePages,
+    ...projectPages,
+    ...articlePages,
+    ...categoryPages,
+  ]
 }
