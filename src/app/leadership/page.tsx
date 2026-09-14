@@ -1,7 +1,18 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import {
+  ArrowRight,
+  BarChart3,
+  BookOpen,
+  Compass,
+  Handshake,
+  Mail,
+  Radio,
+  ShieldCheck,
+  TerminalSquare,
+  TrendingUp,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { PageHero } from "@/components/site/page-hero"
 import { Section, SectionHeading } from "@/components/site/section"
@@ -12,7 +23,7 @@ import { contact, site } from "@/lib/site"
 export const metadata: Metadata = {
   title: "Leadership",
   description:
-    "How Trevor Digital Solutions is run: who is accountable for what, how technical decisions are made, and how client work is governed.",
+    "How Trevor Digital Solutions is run: who is accountable for what, how technical decisions are made, and the standards client work is held to.",
   keywords: [
     "Trevor Digital Solutions leadership",
     "Mwesigwa Trevor Joseph CEO",
@@ -30,22 +41,27 @@ export const metadata: Metadata = {
 }
 
 /**
- * Functions, not invented job titles. TDS is founder-led, and the honest
- * description is which responsibilities are owned rather than an org chart
- * of people who do not exist yet.
+ * Responsibilities, not invented job titles.
+ *
+ * TDS is founder-led. Rather than publish an org chart of people who do not
+ * exist, this page states which functions are owned and by whom. When the
+ * company hires into these functions, each entry gets a real name — nothing
+ * here needs rewriting to make that true.
  */
 const FUNCTIONS = [
   {
     id: "01",
     title: "Strategy & client partnerships",
     owner: "Founder & CEO",
+    icon: Compass,
     description:
-      "Which work the company takes on, what it declines, and the direct relationship with every client. Scoping and commercial terms are agreed at this level, not delegated to a sales function.",
+      "Which work the company takes on, what it declines, and the direct relationship with every client. Scoping and commercial terms are agreed at this level, never delegated to a sales function.",
   },
   {
     id: "02",
     title: "Technical direction",
     owner: "Founder & CEO",
+    icon: TerminalSquare,
     description:
       "Architecture decisions, stack selection and engineering standards. Decisions are made by someone who will also maintain the result, which keeps them conservative on purpose.",
   },
@@ -53,6 +69,7 @@ const FUNCTIONS = [
     id: "03",
     title: "Delivery & quality",
     owner: "Founder & CEO",
+    icon: ShieldCheck,
     description:
       "Sprint planning, code review, testing standards and release readiness. Nothing ships to a client environment without review against the agreed scope.",
   },
@@ -60,6 +77,7 @@ const FUNCTIONS = [
     id: "04",
     title: "Trading systems",
     owner: "Founder & CEO",
+    icon: BarChart3,
     description:
       "MetaTrader development, strategy specification, backtesting integrity and the reporting given to clients, favourable or not.",
   },
@@ -68,23 +86,27 @@ const FUNCTIONS = [
 const GOVERNANCE = [
   {
     title: "Decisions are traceable",
+    icon: BookOpen,
     description:
       "Architecture and scope decisions are written down with the reasoning behind them, so a choice can be revisited later by whoever inherits the system.",
   },
   {
     title: "Nothing is promised twice",
+    icon: Handshake,
     description:
       "Commitments to clients are made once, in writing, by the person accountable for delivering them. There is no gap between what was sold and what was scoped.",
   },
   {
     title: "Bad news travels immediately",
+    icon: Radio,
     description:
       "A slipping timeline or a failed assumption is raised as soon as it is known, not at the deadline. Clients get time to react while reacting is still useful.",
   },
   {
     title: "Growth follows capability",
+    icon: TrendingUp,
     description:
-      "The company adds people when the work genuinely requires it, not to appear larger. Overstated capacity is how agencies end up subcontracting work they cannot supervise.",
+      "The company adds people when the work genuinely requires it, not to appear larger. Overstated capacity is how firms end up subcontracting work they cannot supervise.",
   },
 ]
 
@@ -125,8 +147,8 @@ export default function LeadershipPage() {
 
       <PageHero
         eyebrow="Leadership"
-        title="Founder-led, and honest about it."
-        lead="Trevor Digital Solutions is led by its founder. That is a genuine advantage for clients — decisions happen in one conversation — and we describe it plainly rather than dressing it up as a department chart."
+        title="Founder-led, and straightforward about it."
+        lead="Trevor Digital Solutions is led by its founder. For clients that is a genuine advantage — decisions happen in one conversation instead of three — and we would rather describe it plainly than dress it up as a department chart."
         crumbs={[
           { name: "Home", href: "/" },
           { name: "About", href: "/about" },
@@ -149,36 +171,55 @@ export default function LeadershipPage() {
 
       {/* Who leads */}
       <Section space="loose">
-        <div className="grid gap-10 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-[20rem_minmax(0,1fr)] lg:items-start lg:gap-16">
           <Reveal>
-            <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-2xl bg-surface ring-1 ring-hairline lg:mx-0">
-              <Image
-                src="/founder.png"
-                alt={site.founder}
-                fill
-                sizes="(max-width: 1024px) 20rem, 18rem"
-                className="object-cover object-top"
-              />
-              <div
-                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent"
-                aria-hidden
-              />
+            <div className="overflow-hidden rounded-2xl bg-surface ring-1 ring-hairline">
+              <div className="relative aspect-[3/4] w-full">
+                <Image
+                  src="/founder.png"
+                  alt={site.founder}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 20rem"
+                  className="object-cover object-top"
+                />
+                <div
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent"
+                  aria-hidden
+                />
+              </div>
+              <div className="p-6">
+                <p className="text-[0.9375rem] font-semibold text-foreground">
+                  {site.founder}
+                </p>
+                <p className="mt-1 text-sm text-brand-lift">{site.founderRole}</p>
+                <p className="mt-4 border-t border-hairline pt-4 text-xs leading-relaxed text-muted-foreground">
+                  {site.location}
+                </p>
+              </div>
             </div>
           </Reveal>
 
           <Reveal index={1}>
             <h2 className="eyebrow">Who leads</h2>
             <p className="mt-5 text-2xl leading-snug font-semibold text-foreground sm:text-3xl">
-              {site.founder}
+              One person is accountable, and you deal with him.
             </p>
-            <p className="mt-2 text-brand-lift">{site.founderRole}</p>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Software engineer, MetaTrader expert advisor developer and
-              technology consultant. He holds accountability for strategy,
-              technical direction, delivery quality and the trading systems
-              work, and is the person a client deals with from first
-              conversation through to support after launch.
-            </p>
+            <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground">
+              <p>
+                {site.founder} holds accountability for strategy, technical
+                direction, delivery quality and the trading systems work. He is
+                the person a client deals with from the first conversation
+                through to support after launch — there is no handover to an
+                account manager once the contract is signed.
+              </p>
+              <p>
+                The practical effect is that commitments are made by the person
+                who has to keep them. Estimates come from whoever will write
+                the code, and a scope change gets a straight answer in the same
+                conversation rather than going away to be priced by someone
+                else.
+              </p>
+            </div>
             <Button size="cta" variant="outline" className="mt-8" asChild>
               <Link href="/founder">
                 Full profile
@@ -194,22 +235,25 @@ export default function LeadershipPage() {
         <SectionHeading
           eyebrow="Accountability"
           title="Four functions, each with a named owner."
-          description="As the company grows these functions separate into distinct roles. Until they do, this is who is responsible for what."
+          description="As the company grows these separate into distinct roles. Until they do, this is exactly who is responsible for what — stated rather than implied."
         />
         <ol className="mt-14 grid gap-px overflow-hidden rounded-xl bg-hairline ring-1 ring-hairline sm:grid-cols-2">
           {FUNCTIONS.map((item, index) => (
             <Reveal as="li" key={item.id} index={index} className="bg-surface-raised">
               <div className="h-full p-7 sm:p-8">
-                <div className="flex items-center gap-3">
-                  <span className="font-[family-name:var(--font-mono)] text-xs tracking-[0.12em] text-brand-lift">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="inline-flex size-11 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
+                    <item.icon className="size-5" aria-hidden />
+                  </span>
+                  <span className="font-[family-name:var(--font-mono)] text-xs tracking-[0.14em] text-muted-foreground/60">
                     {item.id}
                   </span>
-                  <span className="text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
-                    {item.owner}
-                  </span>
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-foreground">{item.title}</h3>
-                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                <h3 className="mt-5 text-lg font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1.5 font-[family-name:var(--font-mono)] text-[0.6875rem] tracking-[0.1em] text-brand-lift uppercase">
+                  {item.owner}
+                </p>
+                <p className="mt-3.5 text-sm leading-relaxed text-muted-foreground">
                   {item.description}
                 </p>
               </div>
@@ -223,40 +267,46 @@ export default function LeadershipPage() {
         <SectionHeading
           eyebrow="How we run projects"
           title="The rules we hold ourselves to."
-          description="Commitments about conduct rather than outcomes, because conduct is the part we fully control."
+          description="Commitments about conduct rather than outcomes, because conduct is the part entirely within our control."
         />
-        <ul className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:gap-x-16">
+        <ul className="mt-14 grid gap-5 sm:grid-cols-2">
           {GOVERNANCE.map((item, index) => (
-            <Reveal as="li" key={item.title} index={index}>
-              <h3 className="border-l-2 border-brand pl-5 text-lg font-semibold text-foreground">
-                {item.title}
-              </h3>
-              <p className="mt-3 pl-5 text-sm leading-relaxed text-muted-foreground">
-                {item.description}
-              </p>
+            <Reveal as="li" key={item.title} index={index} className="h-full">
+              <div className="flex h-full gap-5 rounded-xl bg-surface p-6 ring-1 ring-hairline sm:p-7">
+                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
+                  <item.icon className="size-[1.125rem]" aria-hidden />
+                </span>
+                <div className="min-w-0">
+                  <h3 className="text-base font-semibold text-foreground">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
             </Reveal>
           ))}
         </ul>
       </Section>
 
-      {/* Hiring note */}
+      {/* Hiring */}
       <Section tone="surface" space="default" divide="top">
-        <div className="max-w-3xl">
-          <h2 className="text-2xl font-semibold text-foreground">
-            Interested in joining?
-          </h2>
-          <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-            We take on engineers as project volume justifies it, and we would
-            rather hear from someone early than advertise a role we are not
-            ready to fill. Send your work to{" "}
-            <a
-              href={contact.emailHref}
-              className="text-brand-lift underline-offset-4 hover:underline"
-            >
-              {contact.email}
-            </a>{" "}
-            &mdash; code we can read matters more than a CV.
-          </p>
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-16">
+          <div className="max-w-2xl">
+            <h2 className="text-2xl font-semibold text-foreground">
+              Interested in joining?
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              We take on engineers as project volume justifies it, and we would
+              rather hear from someone early than advertise a role we are not
+              ready to fill. Code we can read matters more than a CV.
+            </p>
+          </div>
+          <Button size="cta-lg" variant="outline" asChild>
+            <a href={contact.emailHref}>
+              <Mail aria-hidden />
+              Send us your work
+            </a>
+          </Button>
         </div>
       </Section>
 

@@ -1,16 +1,24 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowRight, Check, Clock, Mail, MapPin, Phone } from "lucide-react"
+import { ArrowRight, Check } from "lucide-react"
 import { submitContactForm } from "@/app/actions/contact"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { WhatsAppIcon } from "@/components/site/social-icons"
 import { toast } from "sonner"
-import { contact, site } from "@/lib/site"
+import { contact } from "@/lib/site"
 import { services } from "@/lib/content/services"
+
+/** Prompts that make a first enquiry genuinely answerable. */
+const MESSAGE_PROMPTS = [
+  "What is not working today, and who it affects",
+  "How the process is handled now — spreadsheets, paper, an existing system",
+  "Roughly how many people would use what we build",
+  "Any deadline you are working towards",
+  "Systems it would need to connect to, if you know",
+]
 
 const BUDGET_BANDS = [
   "Under $1,000",
@@ -36,7 +44,23 @@ export function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [reference, setReference] = useState<string | null>(null)
 
-  async function clientAction(formData: FormData) {
+  /**
+   * Submitted through onSubmit rather than the `action` prop on purpose.
+   *
+   * React 19 automatically resets a form whose `action` is a function, and it
+   * does so whether the action succeeded or failed. On a failed send that
+   * wipes everything the visitor typed — including a long project description
+   * they are unlikely to retype. Handling submit ourselves keeps their input
+   * on screen, and we reset only once the enquiry is actually stored.
+   *
+   * Native validation still runs first: onSubmit does not fire until the
+   * required fields pass.
+   */
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
     setIsSubmitting(true)
 
     const data = {
@@ -56,16 +80,17 @@ export function ContactSection() {
         toast.success("Message sent", {
           description: `We have your enquiry. Reference: ${result.reference}`,
         })
-        const form = document.getElementById("contactForm") as HTMLFormElement | null
-        form?.reset()
+        form.reset()
       } else {
         toast.error("Could not send", {
           description: result.error || "Failed to send your message.",
+          duration: 10000,
         })
       }
     } catch {
       toast.error("Could not send", {
         description: "Something went wrong. Please call or message us instead.",
+        duration: 10000,
       })
     } finally {
       setIsSubmitting(false)
@@ -76,82 +101,46 @@ export function ContactSection() {
     <section id="contact" className="py-16 sm:py-20 lg:py-24">
       <div className="shell">
         <div className="grid gap-12 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-16">
-          {/* Contact details */}
+          {/* Guidance. The contact channels themselves live in the page
+              masthead, so repeating them here would just be noise. */}
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <h2 className="eyebrow">Reach us directly</h2>
+            <h2 className="eyebrow">What to include</h2>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-              If you would rather talk than type, call or message. You will
-              reach the people who would be building your software, not a call
-              centre.
+              None of this is required, and a couple of sentences is a perfectly
+              good start. It just makes our first reply more useful than
+              &ldquo;let&apos;s set up a call&rdquo;.
             </p>
 
-            <ul className="mt-8 space-y-5">
-              <li>
-                <a
-                  href={contact.phoneHref}
-                  className="group flex items-start gap-4 text-sm"
-                >
-                  <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
-                    <Phone className="size-4" aria-hidden />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
-                      Phone
-                    </span>
-                    <span className="mt-1 block text-foreground transition-colors group-hover:text-brand-lift">
-                      {contact.phone}
-                    </span>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href={contact.emailHref}
-                  className="group flex items-start gap-4 text-sm"
-                >
-                  <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
-                    <Mail className="size-4" aria-hidden />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
-                      Email
-                    </span>
-                    <span className="mt-1 block break-all text-foreground transition-colors group-hover:text-brand-lift">
-                      {contact.email}
-                    </span>
-                  </span>
-                </a>
-              </li>
-              <li className="flex items-start gap-4 text-sm">
-                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
-                  <MapPin className="size-4" aria-hidden />
-                </span>
-                <span>
-                  <span className="block text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
-                    Location
-                  </span>
-                  <span className="mt-1 block text-foreground">{site.location}</span>
-                </span>
-              </li>
-              <li className="flex items-start gap-4 text-sm">
-                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
-                  <Clock className="size-4" aria-hidden />
-                </span>
-                <span>
-                  <span className="block text-[0.6875rem] tracking-[0.1em] text-muted-foreground/70 uppercase">
-                    Hours
-                  </span>
-                  <span className="mt-1 block text-foreground">{site.hours}</span>
-                </span>
-              </li>
+            <ul className="mt-8 space-y-4">
+              {MESSAGE_PROMPTS.map((prompt) => (
+                <li key={prompt} className="flex items-start gap-3 text-sm">
+                  <Check className="mt-0.5 size-4 shrink-0 text-brand-lift" aria-hidden />
+                  <span className="leading-relaxed text-muted-foreground">{prompt}</span>
+                </li>
+              ))}
             </ul>
 
-            <Button size="cta-lg" variant="outline" className="mt-8 w-full" asChild>
-              <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="size-[1.125rem]" />
-                Chat on WhatsApp
-              </a>
-            </Button>
+            <div className="mt-8 rounded-xl bg-surface p-5 ring-1 ring-hairline">
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Prefer to talk it through? Call{" "}
+                <a
+                  href={contact.phoneHref}
+                  className="font-medium text-brand-lift underline-offset-4 hover:underline"
+                >
+                  {contact.phone}
+                </a>{" "}
+                or message us on{" "}
+                <a
+                  href={contact.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-brand-lift underline-offset-4 hover:underline"
+                >
+                  WhatsApp
+                </a>
+                .
+              </p>
+            </div>
           </div>
 
           {/* Form */}
@@ -180,7 +169,7 @@ export function ContactSection() {
 
               <form
                 id="contactForm"
-                action={clientAction}
+                onSubmit={handleSubmit}
                 className={`mt-8 space-y-6 ${formControlSizing}`}
               >
                 <div className="grid gap-6 sm:grid-cols-2">

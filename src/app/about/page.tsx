@@ -8,25 +8,31 @@ import { Section, SectionHeading } from "@/components/site/section"
 import { Reveal } from "@/components/site/reveal"
 import { CtaBand } from "@/components/site/cta-band"
 import { AboutSection } from "@/components/sections/about"
-import { coreValues, processSteps } from "@/lib/content/company"
+import {
+  coreValues,
+  problemsWeSolve,
+  processSteps,
+  supportCommitments,
+} from "@/lib/content/company"
+import { serviceCategories } from "@/lib/content/services"
 import { site } from "@/lib/site"
 
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Trevor Digital Solutions is a software engineering company in Kampala, Uganda, founded by Mwesigwa Trevor Joseph. Our approach, principles, leadership and how we work.",
+    "Trevor Digital Solutions is a software engineering company in Kampala, Uganda, founded by Mwesigwa Trevor Joseph. What we build, the problems we solve, how we approach software, and what happens after launch.",
   keywords: [
     "About Trevor Digital Solutions",
     "Trevor Digital Solutions Uganda",
     "Software Company Kampala",
     "Software Company Uganda",
     "Mwesigwa Trevor Joseph",
-    "Trevor Joseph founder",
+    "software engineering company Uganda",
   ],
   openGraph: {
     title: "About Trevor Digital Solutions",
     description:
-      "A software engineering company in Kampala, Uganda, founded by Mwesigwa Trevor Joseph.",
+      "A software engineering company in Kampala, Uganda. What we build, the problems we solve, and how we work.",
     url: "https://trevordigitalsolutions.com/about",
   },
   alternates: { canonical: "https://trevordigitalsolutions.com/about" },
@@ -37,13 +43,13 @@ const ABOUT_LINKS = [
   {
     href: "/founder",
     title: "The founder",
-    description: `${site.founder}, ${site.founderRole} — background, engineering focus and the thinking behind TDS.`,
+    description: `${site.founder}, ${site.founderRole} — background, focus areas and the thinking behind TDS.`,
   },
   {
     href: "/leadership",
     title: "Leadership",
     description:
-      "How the company is run, what each function is responsible for, and how decisions get made.",
+      "How the company is run, who is accountable for what, and how decisions get made.",
   },
   {
     href: "/testimonials",
@@ -58,7 +64,7 @@ export default function AboutPage() {
       <PageHero
         eyebrow="About TDS"
         title="A software company that stays after launch."
-        lead="We are engineers first. That shows up in how we scope work, what we refuse to promise, and the fact that the systems we build are still running years later."
+        lead="Trevor Digital Solutions designs and builds practical technology for businesses and organisations — custom software, business systems, web and mobile applications, AI and automation, and trading technology. We are engineers first, and it shows in how we scope work, what we refuse to promise, and the fact that we are still maintaining the systems we built."
         crumbs={[{ name: "Home", href: "/" }, { name: "About" }]}
         actions={
           <>
@@ -75,27 +81,72 @@ export default function AboutPage() {
         }
       />
 
+      {/* Who we are, mission and vision, brand panel */}
       <AboutSection />
 
-      {/* Principles */}
+      {/* What we do */}
       <Section space="loose">
         <SectionHeading
-          eyebrow="How we operate"
-          title="Four principles that decide the hard calls."
-          description="These are not wall posters. Each one has cost us money at some point, which is the only real test of whether a principle is held."
+          eyebrow="What we do"
+          title="Six areas of engineering work."
+          description="Most engagements start in one of these and grow into a second. Each links through to what it covers in detail."
+          action={
+            <Button size="cta" variant="outline" asChild>
+              <Link href="/services">
+                All services
+                <ArrowRight aria-hidden />
+              </Link>
+            </Button>
+          }
         />
-        <ul className="mt-14 grid gap-px overflow-hidden rounded-xl bg-hairline ring-1 ring-hairline sm:grid-cols-2">
-          {coreValues.map((value, index) => (
-            <Reveal as="li" key={value.title} index={index} className="bg-surface">
-              <div className="h-full p-7 sm:p-8">
-                <span className="font-[family-name:var(--font-mono)] text-xs tracking-[0.12em] text-brand-lift">
-                  {String(index + 1).padStart(2, "0")}
+        <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {serviceCategories.map((category, index) => (
+            <Reveal as="li" key={category.id} index={index} className="h-full">
+              <Link
+                href={`/services#${category.id}`}
+                className="group flex h-full flex-col rounded-xl bg-surface p-6 ring-1 ring-hairline transition-colors duration-200 hover:bg-surface-raised hover:ring-primary/40"
+              >
+                <span className="inline-flex size-11 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
+                  <category.icon className="size-5" aria-hidden />
                 </span>
-                <h3 className="mt-4 text-lg font-semibold text-foreground">
-                  {value.title}
+                <h3 className="mt-5 text-base font-semibold text-foreground">
+                  {category.name}
+                </h3>
+                <p className="mt-2.5 flex-1 text-sm leading-relaxed text-muted-foreground">
+                  {category.what}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-brand-lift">
+                  What we build
+                  <ArrowUpRight
+                    className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    aria-hidden
+                  />
+                </span>
+              </Link>
+            </Reveal>
+          ))}
+        </ul>
+      </Section>
+
+      {/* Problems we solve */}
+      <Section tone="surface" space="loose" divide="both">
+        <SectionHeading
+          eyebrow="Problems we solve"
+          title="What usually brings a client here."
+          description="Almost every project starts with one of these six situations. None of them are software problems to begin with — they are operational problems that software turns out to be the cheapest way to fix."
+        />
+        <ul className="mt-14 grid gap-px overflow-hidden rounded-xl bg-hairline ring-1 ring-hairline sm:grid-cols-2 lg:grid-cols-3">
+          {problemsWeSolve.map((problem, index) => (
+            <Reveal as="li" key={problem.title} index={index} className="bg-surface-raised">
+              <div className="h-full p-7">
+                <span className="inline-flex size-10 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
+                  <problem.icon className="size-[1.125rem]" aria-hidden />
+                </span>
+                <h3 className="mt-5 text-[0.9375rem] leading-snug font-semibold text-foreground">
+                  {problem.title}
                 </h3>
                 <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                  {value.description}
+                  {problem.description}
                 </p>
               </div>
             </Reveal>
@@ -103,18 +154,18 @@ export default function AboutPage() {
         </ul>
       </Section>
 
-      {/* How we work */}
-      <Section tone="surface" space="loose" divide="both">
+      {/* Our approach */}
+      <Section space="loose">
         <SectionHeading
-          eyebrow="Engagement"
-          title="The same five stages, every time."
-          description="Whether a project runs four weeks or six months, you always know which stage you are in and what has to happen next."
+          eyebrow="Our approach"
+          title="Scoped before it starts. Five stages, every time."
+          description="Whether a project runs four weeks or six months, you always know which stage you are in, what has to happen next, and what it costs. Nothing begins on a handshake."
         />
         <ol className="mt-14 space-y-px overflow-hidden rounded-xl bg-hairline ring-1 ring-hairline">
           {processSteps.map((step) => (
             <li
               key={step.id}
-              className="flex flex-col gap-3 bg-surface-raised p-6 sm:flex-row sm:gap-8 sm:p-7"
+              className="flex flex-col gap-3 bg-surface p-6 sm:flex-row sm:gap-8 sm:p-7"
             >
               <span className="font-[family-name:var(--font-mono)] text-xs tracking-[0.12em] text-brand-lift sm:w-12 sm:shrink-0 sm:pt-1">
                 {step.id}
@@ -128,9 +179,47 @@ export default function AboutPage() {
             </li>
           ))}
         </ol>
+
+        <div className="mt-12 grid gap-px overflow-hidden rounded-xl bg-hairline ring-1 ring-hairline sm:grid-cols-2">
+          {coreValues.map((value, index) => (
+            <Reveal as="div" key={value.title} index={index} className="bg-surface-raised">
+              <div className="h-full p-7">
+                <span className="font-[family-name:var(--font-mono)] text-xs tracking-[0.12em] text-brand-lift">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-4 text-lg font-semibold text-foreground">{value.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                  {value.description}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </Section>
 
-      {/* Founder strip */}
+      {/* Quality and long-term support */}
+      <Section tone="surface" space="loose" divide="both">
+        <SectionHeading
+          eyebrow="After launch"
+          title="Quality is what survives the handover."
+          description="A system is judged over years of use, not on demo day. Four commitments that apply to every project we take on."
+        />
+        <ul className="mt-14 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:gap-x-14">
+          {supportCommitments.map((item, index) => (
+            <Reveal as="li" key={item.title} index={index}>
+              <div className="flex size-11 items-center justify-center rounded-lg bg-primary/10 text-brand-lift ring-1 ring-primary/20">
+                <item.icon className="size-5" aria-hidden />
+              </div>
+              <h3 className="mt-5 text-lg font-semibold text-foreground">{item.title}</h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                {item.description}
+              </p>
+            </Reveal>
+          ))}
+        </ul>
+      </Section>
+
+      {/* Founder */}
       <Section space="loose">
         <div className="grid gap-10 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-center lg:gap-16">
           <Reveal>
@@ -157,10 +246,10 @@ export default function AboutPage() {
             <p className="mt-2 text-brand-lift">{site.founderRole}</p>
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
               Software engineer, expert advisor developer and technology
-              consultant. He founded Trevor Digital Solutions to do
-              client work the way he thought it should be done: understand the
-              business first, scope honestly, build properly, and stay
-              responsible for the result.
+              consultant. He founded Trevor Digital Solutions to do client work
+              the way he thought it should be done: understand the business
+              first, scope honestly, build properly, and stay responsible for
+              the result.
             </p>
             <Button size="cta" variant="outline" className="mt-8" asChild>
               <Link href="/founder">
