@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import { SiteFrame } from "@/components/site/site-frame"
 import { contact, site } from "@/lib/site"
 
 /**
@@ -172,11 +173,11 @@ export default function RootLayout({
           >
             Skip to content
           </a>
-          <Navbar />
-          <main id="main" className="flex flex-1 flex-col pt-16 sm:pt-[4.5rem]">
+          {/* SiteFrame omits the public navbar and footer on /admin, which
+              has its own sidebar and top bar. */}
+          <SiteFrame navbar={<Navbar />} footer={<Footer />}>
             {children}
-          </main>
-          <Footer />
+          </SiteFrame>
           <Toaster />
         </ThemeProvider>
       </body>

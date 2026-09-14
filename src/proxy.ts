@@ -8,19 +8,13 @@ export async function proxy(request: NextRequest) {
   // render perfectly well from local content, so pass them straight through
   // rather than throwing and turning every route into a 500.
   if (!isSupabaseConfigured) {
-    const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
-
-    if (isAdminRoute) {
-      // The admin portal genuinely cannot work without Supabase. Say so
-      // plainly instead of failing with a stack trace.
-      return new NextResponse(
-        'The admin portal requires Supabase. Set NEXT_PUBLIC_SUPABASE_URL and ' +
-          'NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local, then restart the server. ' +
-          'See README.md for details.',
-        { status: 503, headers: { 'content-type': 'text/plain; charset=utf-8' } }
-      )
-    }
-
+    // Without credentials there is no session to check and nothing to
+    // protect: the admin has no server-side data at all. The portal renders
+    // as an unauthenticated interface preview that says so on every screen,
+    // so the UI can be reviewed before Phase 6 connects Supabase Auth.
+    //
+    // The moment the two environment variables are present, the real session
+    // check below takes over and /admin/* requires a signed-in user.
     return NextResponse.next({ request })
   }
 
