@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 import { CategoryIcon } from "./category-icon"
-import { formatArticleDate } from "@/lib/content/insights"
+import { formatArticleDate } from "@/lib/content/insights-utils"
 import type { ResolvedArticle } from "@/lib/content/insights-types"
 
 /**

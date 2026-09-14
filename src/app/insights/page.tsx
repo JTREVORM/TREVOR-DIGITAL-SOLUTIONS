@@ -12,9 +12,19 @@ import {
   getActiveCategories,
   getFeaturedArticle,
   getVisibleArticles,
-  searchIndexOf,
-} from "@/lib/content/insights"
+} from "@/lib/content/insights-queries"
+import { searchIndexOf } from "@/lib/content/insights-utils"
 import { site } from "@/lib/site"
+
+/**
+ * Rendered per request.
+ *
+ * Insights is CMS-backed: an article published in the admin portal has to
+ * appear here immediately, and one unpublished has to disappear just as fast.
+ * A statically cached page would keep serving whatever existed at build time —
+ * which, on the first deploy, is nothing at all.
+ */
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Insights",
@@ -38,18 +48,18 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://trevordigitalsolutions.com/insights" },
 }
 
-export default function InsightsPage() {
-  const articles = getVisibleArticles()
-  const featured = getFeaturedArticle()
-  const categories = getActiveCategories()
+export default async function InsightsPage() {
+  const [articles, featured, categories] = await Promise.all([
+    getVisibleArticles(),
+    getFeaturedArticle(),
+    getActiveCategories(),
+  ])
 
   // Search index is built on the server so no article body ships twice.
   const items = articles.map((article) => ({
     article,
     haystack: searchIndexOf(article),
   }))
-
-  const hasSamples = articles.some((article) => article.status === "sample")
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -103,22 +113,6 @@ export default function InsightsPage() {
           </ul>
         </nav>
       </PageHero>
-
-      {/* Sample-content notice. Removed automatically once real articles
-          replace the samples. */}
-      {hasSamples ? (
-        <div className="border-b border-hairline bg-primary/[0.06]">
-          <div className="shell py-4">
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              <span className="font-medium text-foreground">
-                Insights is launching.
-              </span>{" "}
-              Articles marked <span className="text-foreground">Sample</span>{" "}
-              demonstrate the layout and are not published TDS reporting.
-            </p>
-          </div>
-        </div>
-      ) : null}
 
       {/* Featured */}
       {featured ? (

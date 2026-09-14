@@ -12,32 +12,63 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-The public site runs with **no configuration** — every marketing page renders
-from local content, so `npm run dev` works on a fresh clone.
+The marketing pages render from local content and work without configuration.
+Insights (the blog) and the admin portal read from Supabase, so they need the
+environment variables below.
 
 ## Environment variables
 
-Supabase powers two things only: the **admin portal** (`/admin`) and the
-**contact-form inbox**. Everything else works without it.
-
-Create a `.env.local` in the project root to enable them:
+Create `.env` (or `.env.local`) in the project root. This project is
+**Next.js**, so only `NEXT_PUBLIC_`-prefixed variables reach the browser —
+`VITE_` names are ignored by the framework entirely.
 
 ```bash
+# Public — safe in the browser, constrained by Row Level Security
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-or-publishable-key
+
+# Server only — NEVER prefix either of these with NEXT_PUBLIC_
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key   # bypasses RLS entirely
+DATABASE_URL=postgresql://...                     # direct Postgres, migrations only
 ```
 
-Both values come from your Supabase project under **Settings → API**. Restart
-the dev server after adding them. Set the same two variables in your hosting
-provider's environment settings when deploying.
+`.env*` is gitignored. Never commit real keys.
 
-Without them:
+Restart the server after editing — `NEXT_PUBLIC_` values are compiled in, so
+changes take effect only on restart.
 
-- public pages render normally
-- `/admin/*` returns `503` with a message explaining what is missing
-- the contact form tells the visitor to email or call instead
+## Database
 
-`.env.local` is gitignored — never commit real keys.
+Schema, policies, storage and seed data live in `supabase/migrations/` and are
+applied in order. Every migration is idempotent, so re-running is safe.
+
+```bash
+node scripts/db.mjs inspect                                   # tables, RLS, policies, buckets
+node scripts/db.mjs apply supabase/migrations/0001_core_schema.sql
+node scripts/db.mjs apply supabase/migrations/0002_rls_policies.sql
+node scripts/db.mjs apply supabase/migrations/0003_storage.sql
+node scripts/db.mjs apply supabase/migrations/0004_seed.sql
+```
+
+### Admin users
+
+New accounts get the lowest role (`viewer`) and cannot reach the CMS.
+Promoting someone is a deliberate, separate step:
+
+```bash
+node scripts/create-admin.mjs someone@example.com
+```
+
+Uses the service-role key locally; it never reaches the browser.
+
+### Verifying security
+
+```bash
+node scripts/verify-security.mjs <admin-email> <admin-password>
+```
+
+Attacks the database with the anon key the way a crafted request would, then
+repeats the checks as a signed-in admin. Every assertion must pass.
 
 ## Project structure
 

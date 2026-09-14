@@ -12,19 +12,24 @@ import {
   getActiveCategories,
   getArticlesInCategory,
   getCategoryBySlug,
-  insightCategories,
-} from "@/lib/content/insights"
+} from "@/lib/content/insights-queries"
 import { site } from "@/lib/site"
+
+/**
+ * Rendered per request.
+ *
+ * Insights is CMS-backed: an article published in the admin portal has to
+ * appear here immediately, and one unpublished has to disappear just as fast.
+ * A statically cached page would keep serving whatever existed at build time —
+ * which, on the first deploy, is nothing at all.
+ */
+export const dynamic = "force-dynamic"
 
 type Props = { params: Promise<{ category: string }> }
 
-export async function generateStaticParams() {
-  return insightCategories.map((category) => ({ category: category.slug }))
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category: slug } = await params
-  const category = getCategoryBySlug(slug)
+  const category = await getCategoryBySlug(slug)
   if (!category) return { title: "Category not found" }
 
   const url = `${site.url}/insights/category/${category.slug}`
@@ -45,11 +50,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CategoryPage({ params }: Props) {
   const { category: slug } = await params
-  const category = getCategoryBySlug(slug)
+  const category = await getCategoryBySlug(slug)
   if (!category) notFound()
 
-  const articles = getArticlesInCategory(category.id)
-  const otherCategories = getActiveCategories().filter((c) => c.id !== category.id)
+  const [articles, active] = await Promise.all([
+    getArticlesInCategory(category.id),
+    getActiveCategories(),
+  ])
+  const otherCategories = active.filter((c) => c.id !== category.id)
 
   return (
     <>

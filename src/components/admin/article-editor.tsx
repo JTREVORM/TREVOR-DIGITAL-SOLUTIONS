@@ -27,7 +27,7 @@ import { BlockEditor } from "./block-editor"
 import { MediaPickerDialog } from "./media-picker"
 import { ArticleContent } from "@/components/insights/article-content"
 import { isSlugTaken, saveArticle, slugify } from "@/lib/admin/service"
-import { readingTimeOf } from "@/lib/content/insights"
+import { readingTimeOf } from "@/lib/content/insights-utils"
 import type {
   AdminArticle,
   AdminAuthor,

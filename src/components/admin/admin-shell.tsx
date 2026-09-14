@@ -24,6 +24,7 @@ import {
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { LogoMark } from "@/components/site/logo"
+import { logout } from "@/app/actions/auth"
 
 /**
  * Admin chrome: fixed sidebar on desktop, slide-over drawer on mobile, and a
@@ -141,10 +142,12 @@ export function AdminShell({
   children,
   userEmail,
   isPreview,
+  role,
 }: {
   children: React.ReactNode
   userEmail?: string
   isPreview: boolean
+  role?: string
 }) {
   const [drawerOpen, setDrawerOpen] = React.useState(false)
   const [menuOpen, setMenuOpen] = React.useState(false)
@@ -291,8 +294,8 @@ export function AdminShell({
                         <p className="truncate text-sm font-medium text-foreground">
                           {userEmail ?? "Not signed in"}
                         </p>
-                        <p className="mt-0.5 text-xs text-muted-foreground">
-                          {isPreview ? "Preview mode" : "Administrator"}
+                        <p className="mt-0.5 text-xs text-muted-foreground capitalize">
+                          {isPreview ? "Preview mode" : (role ?? "Signed in")}
                         </p>
                       </div>
                       <Link
@@ -315,7 +318,7 @@ export function AdminShell({
                           Go to sign in
                         </Link>
                       ) : (
-                        <form action="/admin/logout" method="post">
+                        <form action={logout}>
                           <button
                             type="submit"
                             role="menuitem"

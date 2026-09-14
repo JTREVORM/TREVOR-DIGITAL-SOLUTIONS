@@ -4,7 +4,7 @@ import { ArticleMedia } from "./article-media"
 import { CategoryIcon } from "./category-icon"
 import { SampleBadge } from "./article-meta"
 import { ShareButtons } from "./share-buttons"
-import { formatArticleDate } from "@/lib/content/insights"
+import { formatArticleDate } from "@/lib/content/insights-utils"
 import type { ResolvedArticle } from "@/lib/content/insights-types"
 
 /**

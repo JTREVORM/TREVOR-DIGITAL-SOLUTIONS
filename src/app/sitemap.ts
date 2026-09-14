@@ -1,8 +1,11 @@
 import type { MetadataRoute } from "next"
 import { services } from "@/lib/content/services"
 import { projects } from "@/lib/content/projects"
-import { getVisibleArticles, insightCategories } from "@/lib/content/insights"
+import { getAllCategories, getVisibleArticles } from "@/lib/content/insights-queries"
 import { site } from "@/lib/site"
+
+/** Rebuilt hourly so newly published articles enter the sitemap. */
+export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date()
@@ -43,14 +46,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  const articlePages: MetadataRoute.Sitemap = getVisibleArticles().map((article) => ({
+  const [visibleArticles, allCategories] = await Promise.all([
+    getVisibleArticles(),
+    getAllCategories(),
+  ])
+
+  const articlePages: MetadataRoute.Sitemap = visibleArticles.map((article) => ({
     url: `${site.url}/insights/${article.slug}`,
     lastModified: new Date(`${article.updatedDate ?? article.publishedDate}T00:00:00Z`),
     changeFrequency: "monthly",
     priority: 0.7,
   }))
 
-  const categoryPages: MetadataRoute.Sitemap = insightCategories.map((category) => ({
+  const categoryPages: MetadataRoute.Sitemap = allCategories.map((category) => ({
     url: `${site.url}/insights/category/${category.slug}`,
     lastModified,
     changeFrequency: "weekly",

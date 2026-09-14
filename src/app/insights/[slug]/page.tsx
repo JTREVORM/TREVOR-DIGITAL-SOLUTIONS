@@ -10,23 +10,26 @@ import { RelatedArticles } from "@/components/insights/related-articles"
 import { ShareButtons } from "@/components/insights/share-buttons"
 import { NewsletterCta } from "@/components/insights/newsletter-cta"
 import {
-  articles as allArticles,
   getArticleBySlug,
   getRelatedArticles,
-} from "@/lib/content/insights"
+} from "@/lib/content/insights-queries"
 import { site } from "@/lib/site"
+
+/**
+ * Rendered per request.
+ *
+ * Insights is CMS-backed: an article published in the admin portal has to
+ * appear here immediately, and one unpublished has to disappear just as fast.
+ * A statically cached page would keep serving whatever existed at build time —
+ * which, on the first deploy, is nothing at all.
+ */
+export const dynamic = "force-dynamic"
 
 type Props = { params: Promise<{ slug: string }> }
 
-export async function generateStaticParams() {
-  return allArticles
-    .filter((article) => article.status !== "draft")
-    .map((article) => ({ slug: article.slug }))
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const article = getArticleBySlug(slug)
+  const article = await getArticleBySlug(slug)
   if (!article) return { title: "Article not found" }
 
   const title = article.seoTitle ?? article.title
@@ -63,10 +66,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params
-  const article = getArticleBySlug(slug)
+  const article = await getArticleBySlug(slug)
   if (!article) notFound()
 
-  const related = getRelatedArticles(article)
+  const related = await getRelatedArticles(article)
   const url = `${site.url}/insights/${article.slug}`
 
   const jsonLd = {
@@ -107,19 +110,6 @@ export default async function ArticlePage({ params }: Props) {
 
       <article className="py-14 sm:py-16 lg:py-20">
         <div className="shell">
-          {article.status === "sample" ? (
-            <aside className="mb-10 max-w-[68ch] rounded-xl bg-muted/60 p-5 ring-1 ring-hairline">
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                <span className="font-medium text-foreground">
-                  This is a sample article.
-                </span>{" "}
-                It demonstrates the Insights layout and typography while the
-                publication is being set up. It is not published TDS reporting,
-                and it contains no client information.
-              </p>
-            </aside>
-          ) : null}
-
           <ArticleContent content={article.content} />
 
           {/* Tags */}
