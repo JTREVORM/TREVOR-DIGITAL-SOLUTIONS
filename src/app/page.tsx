@@ -7,11 +7,12 @@ import { TechnologiesSection } from "@/components/sections/technologies"
 import { ProcessSection } from "@/components/sections/process"
 import { IndustriesSection } from "@/components/sections/industries"
 import { CtaBand } from "@/components/site/cta-band"
+import { site } from "@/lib/site"
 
 export const metadata: Metadata = {
   title: "Trevor Digital Solutions — Software Engineering Company in Uganda",
   description:
-    "Trevor Digital Solutions builds custom software, business management systems, websites, mobile applications, AI solutions and trading technologies. Software engineering from Kampala, Uganda.",
+    "We build custom software, business management systems, websites, mobile apps, AI solutions and trading technology. Software engineering from Kampala, Uganda.",
   keywords: [
     "Trevor Digital Solutions",
     "Trevor Digital Solutions Uganda",
@@ -43,9 +44,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/logo.png",
-        width: 1536,
-        height: 1024,
+        url: site.ogImage,
+        width: 1200,
+        height: 630,
         alt: "Trevor Digital Solutions",
       },
     ],
@@ -55,7 +56,7 @@ export const metadata: Metadata = {
     title: "Trevor Digital Solutions — Software Engineering Company in Uganda",
     description:
       "We build the software behind better businesses: custom software, business management systems, websites, mobile applications, AI solutions and trading technologies.",
-    images: ["/logo.png"],
+    images: [site.ogImage],
   },
   alternates: {
     canonical: "https://trevordigitalsolutions.com",

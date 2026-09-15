@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { PageHero } from "@/components/site/page-hero"
 import { CtaBand } from "@/components/site/cta-band"
 import { TestimonialsSection } from "@/components/sections/testimonials"
+import { BreadcrumbJsonLd } from "@/components/site/structured-data"
+import { defaultOgImages } from "@/lib/site"
 
 export const metadata: Metadata = {
   title: "Client Feedback",
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
     title: "Client Feedback | Trevor Digital Solutions",
     description: "Feedback from businesses we have built software for.",
     url: "https://trevordigitalsolutions.com/testimonials",
+    images: defaultOgImages,
   },
   alternates: { canonical: "https://trevordigitalsolutions.com/testimonials" },
 }
@@ -21,6 +24,8 @@ export const metadata: Metadata = {
 export default function TestimonialsPage() {
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Home", path: "/" }, { name: "About", path: "/about" }, { name: "Client Feedback", path: "/testimonials" }]} />
+
       <PageHero
         eyebrow="Client feedback"
         title="In their words."

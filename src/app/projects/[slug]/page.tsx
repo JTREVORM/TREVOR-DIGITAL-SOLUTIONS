@@ -16,6 +16,7 @@ import {
   projects,
 } from "@/lib/content/projects"
 import { contact, site } from "@/lib/site"
+import { JsonLd, breadcrumbSchema } from "@/components/site/structured-data"
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -41,9 +42,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "article",
       images: [
         {
-          url: project.image ?? "/logo.png",
-          width: project.image ? undefined : 1536,
-          height: project.image ? undefined : 1024,
+          url: project.image ?? site.ogImage,
+          width: project.image ? undefined : 1200,
+          height: project.image ? undefined : 630,
           alt: `${project.name} — ${site.name}`,
         },
       ],
@@ -52,7 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: `${project.name} | ${site.name}`,
       description,
-      images: [project.image ?? "/logo.png"],
+      images: [project.image ?? site.ogImage],
     },
     alternates: { canonical: `${site.url}/projects/${project.slug}` },
   }
@@ -139,9 +140,13 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd data={jsonLd} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Projects", path: "/projects" },
+          { name: project.name, path: `/projects/${project.slug}` },
+        ])}
       />
 
       {/* 1. Project hero */}

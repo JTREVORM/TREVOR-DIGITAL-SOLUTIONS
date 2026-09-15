@@ -1,8 +1,17 @@
 import type { Metadata } from "next"
+import { defaultOgImages } from "@/lib/site"
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy Policy for Trevor Digital Solutions — how we collect, use, and protect your personal information.",
+  description:
+    "How Trevor Digital Solutions collects, uses and protects your personal information.",
+  openGraph: {
+    title: "Privacy Policy | Trevor Digital Solutions",
+    description: "How Trevor Digital Solutions collects, uses and protects your personal information.",
+    url: "https://trevordigitalsolutions.com/privacy-policy",
+    images: defaultOgImages,
+  },
+  alternates: { canonical: "https://trevordigitalsolutions.com/privacy-policy" },
 }
 
 export default function PrivacyPolicyPage() {

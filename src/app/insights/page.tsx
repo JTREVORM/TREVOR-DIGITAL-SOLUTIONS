@@ -15,6 +15,7 @@ import {
 } from "@/lib/content/insights-queries"
 import { searchIndexOf } from "@/lib/content/insights-utils"
 import { site } from "@/lib/site"
+import { BreadcrumbJsonLd } from "@/components/site/structured-data"
 
 /**
  * Rendered per request.
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
       "Technology, engineering and market insights from Trevor Digital Solutions.",
     url: "https://trevordigitalsolutions.com/insights",
     type: "website",
-    images: [{ url: "/logo.png", width: 1536, height: 1024, alt: site.name }],
+    images: [{ url: site.ogImage, width: 1200, height: 630, alt: site.name }],
   },
   alternates: { canonical: "https://trevordigitalsolutions.com/insights" },
 }
@@ -85,6 +86,8 @@ export default async function InsightsPage() {
 
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Home", path: "/" }, { name: "Insights", path: "/insights" }]} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -15,11 +15,12 @@ import {
   projects,
 } from "@/lib/content/projects"
 import { site } from "@/lib/site"
+import { BreadcrumbJsonLd } from "@/components/site/structured-data"
 
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Software built by Trevor Digital Solutions for microfinance providers, SACCOs, automotive services, hardware retail and electrical suppliers, plus in-house AI products.",
+    "Software built for microfinance providers, SACCOs, automotive services, hardware retail and electrical suppliers, plus AI products built in-house.",
   keywords: [
     "Trevor Digital Solutions projects",
     "software projects Uganda",
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
     description:
       "Real software for real businesses: financial technology, business systems and AI products.",
     url: "https://trevordigitalsolutions.com/projects",
-    images: [{ url: "/logo.png", width: 1536, height: 1024, alt: site.name }],
+    images: [{ url: site.ogImage, width: 1200, height: 630, alt: site.name }],
   },
   alternates: { canonical: "https://trevordigitalsolutions.com/projects" },
 }
@@ -57,6 +58,8 @@ export default function ProjectsPage() {
 
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Home", path: "/" }, { name: "Projects", path: "/projects" }]} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -14,6 +14,7 @@ import {
   getCategoryBySlug,
 } from "@/lib/content/insights-queries"
 import { site } from "@/lib/site"
+import { BreadcrumbJsonLd } from "@/components/site/structured-data"
 
 /**
  * Rendered per request.
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: category.description,
       url,
       type: "website",
-      images: [{ url: "/logo.png", width: 1536, height: 1024, alt: site.name }],
+      images: [{ url: site.ogImage, width: 1200, height: 630, alt: site.name }],
     },
     alternates: { canonical: url },
   }
@@ -61,6 +62,14 @@ export default async function CategoryPage({ params }: Props) {
 
   return (
     <>
+      <BreadcrumbJsonLd
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Insights", path: "/insights" },
+          { name: category.name, path: `/insights/category/${category.slug}` },
+        ]}
+      />
+
       <PageHero
         eyebrow={`Insights / ${category.name}`}
         title={category.name}

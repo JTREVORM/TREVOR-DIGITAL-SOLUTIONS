@@ -30,5 +30,9 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  // supabase/functions is Deno, not Next. It has its own global (`Deno`), its
+  // own module resolution (`npm:` specifiers, `.ts` import paths) and its own
+  // type checker via the Supabase CLI. Type-checking it with the app's
+  // config reports errors that are not errors.
+  "exclude": ["node_modules", "supabase/functions"]
 }

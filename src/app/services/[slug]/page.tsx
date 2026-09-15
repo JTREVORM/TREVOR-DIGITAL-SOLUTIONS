@@ -7,7 +7,8 @@ import { PageHero } from "@/components/site/page-hero"
 import { Section } from "@/components/site/section"
 import { CtaBand } from "@/components/site/cta-band"
 import { serviceBySlug, services } from "@/lib/content/services"
-import { contact, site } from "@/lib/site"
+import { contact, defaultOgImages, site } from "@/lib/site"
+import { JsonLd, breadcrumbSchema, serviceSchema } from "@/components/site/structured-data"
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -27,6 +28,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${service.title} | ${site.name}`,
       description: service.summary,
       url: `${site.url}/services/${service.slug}`,
+      type: "article",
+      images: defaultOgImages,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${service.title} | ${site.name}`,
+      description: service.summary,
+      images: [site.ogImage],
     },
     alternates: { canonical: `${site.url}/services/${service.slug}` },
   }
@@ -51,9 +60,21 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      <JsonLd data={faqJsonLd} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Services", path: "/services" },
+          { name: service.title, path: `/services/${service.slug}` },
+        ])}
+      />
+      <JsonLd
+        data={serviceSchema({
+          name: service.title,
+          description: service.summary,
+          path: `/services/${service.slug}`,
+          serviceTypes: service.highlights,
+        })}
       />
 
       <PageHero

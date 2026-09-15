@@ -15,12 +15,13 @@ import {
   supportCommitments,
 } from "@/lib/content/company"
 import { serviceCategories } from "@/lib/content/services"
-import { site } from "@/lib/site"
+import { site, defaultOgImages } from "@/lib/site"
+import { BreadcrumbJsonLd } from "@/components/site/structured-data"
 
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Trevor Digital Solutions is a software engineering company in Kampala, Uganda, founded by Mwesigwa Trevor Joseph. What we build, the problems we solve, how we approach software, and what happens after launch.",
+    "A software engineering company in Kampala, Uganda. What we build, the problems we solve, and how we work — from scoping through to support after launch.",
   keywords: [
     "About Trevor Digital Solutions",
     "Trevor Digital Solutions Uganda",
@@ -34,6 +35,7 @@ export const metadata: Metadata = {
     description:
       "A software engineering company in Kampala, Uganda. What we build, the problems we solve, and how we work.",
     url: "https://trevordigitalsolutions.com/about",
+    images: defaultOgImages,
   },
   alternates: { canonical: "https://trevordigitalsolutions.com/about" },
 }
@@ -61,6 +63,8 @@ const ABOUT_LINKS = [
 export default function AboutPage() {
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Home", path: "/" }, { name: "About", path: "/about" }]} />
+
       <PageHero
         eyebrow="About TDS"
         title="A software company that stays after launch."

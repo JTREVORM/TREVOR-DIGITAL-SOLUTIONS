@@ -78,8 +78,31 @@ export const metadata: Metadata = {
     title: site.name,
     description: "Transforming ideas into powerful digital solutions.",
     siteName: site.name,
-    images: [{ url: "/logo.png", width: 1536, height: 1024, alt: site.name }],
+    images: [{ url: site.ogImage, width: 1200, height: 630, alt: site.name }],
   },
+  // Inherited by every page that does not set its own. Pages with a more
+  // specific card (articles, projects) override it.
+  twitter: {
+    card: "summary_large_image",
+    title: site.name,
+    description: "Transforming ideas into powerful digital solutions.",
+    images: [site.ogImage],
+  },
+  // The public site is meant to be indexed; /admin sets its own noindex.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  // One canonical host, so the same page is never indexed twice.
+  alternates: { canonical: site.url },
+  category: "technology",
 }
 
 export const viewport: Viewport = {

@@ -1,8 +1,17 @@
 import type { Metadata } from "next"
+import { defaultOgImages } from "@/lib/site"
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "Terms of Service for Trevor Digital Solutions — the legal agreement governing use of our services.",
+  description:
+    "The terms governing use of the Trevor Digital Solutions website and services.",
+  openGraph: {
+    title: "Terms of Service | Trevor Digital Solutions",
+    description: "The terms governing use of the Trevor Digital Solutions website and services.",
+    url: "https://trevordigitalsolutions.com/terms-of-service",
+    images: defaultOgImages,
+  },
+  alternates: { canonical: "https://trevordigitalsolutions.com/terms-of-service" },
 }
 
 export default function TermsOfServicePage() {

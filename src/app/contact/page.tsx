@@ -5,13 +5,14 @@ import { PageHero } from "@/components/site/page-hero"
 import { Section } from "@/components/site/section"
 import { Reveal } from "@/components/site/reveal"
 import { WhatsAppIcon } from "@/components/site/social-icons"
-import { contact, site } from "@/lib/site"
+import { contact, site, defaultOgImages } from "@/lib/site"
 import { serviceCategories } from "@/lib/content/services"
+import { BreadcrumbJsonLd } from "@/components/site/structured-data"
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Have a business problem that software could solve? Talk to Trevor Digital Solutions about your project, requirements or technology needs. Phone, WhatsApp, email or the enquiry form. Based in Kampala, Uganda.",
+    "Have a business problem software could solve? Talk to us about your project by phone, WhatsApp, email or the enquiry form. Based in Kampala, Uganda.",
   keywords: [
     "contact Trevor Digital Solutions",
     "software developer Kampala contact",
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
     description:
       "Have a business problem that software could solve? Tell us about it — written scope and price before anything starts.",
     url: "https://trevordigitalsolutions.com/contact",
+    images: defaultOgImages,
   },
   alternates: { canonical: "https://trevordigitalsolutions.com/contact" },
 }
@@ -78,6 +80,8 @@ const NEXT_STEPS = [
 export default function ContactPage() {
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }]} />
+
       <PageHero
         eyebrow="Contact"
         title="Have a business problem that software could solve?"

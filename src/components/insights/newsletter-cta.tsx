@@ -1,36 +1,58 @@
 "use client"
 
-import { useState, type FormEvent } from "react"
-import { Check, Mail } from "lucide-react"
+import { useState, useTransition, type FormEvent } from "react"
+import { AlertCircle, Check, Loader2, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { subscribeToNewsletter, type SubscribeResult } from "@/app/actions/newsletter"
 import { cn } from "@/lib/utils"
 
 /**
- * Newsletter sign-up — interface only.
+ * Newsletter sign-up.
  *
- * PHASE 5: there is no backend behind this yet, and the component says so
- * rather than pretending to subscribe anyone. Wire `onSubmit` to a server
- * action and remove the notice once a list exists. Collecting addresses into
- * a form that discards them would be worse than not offering it.
+ * The address goes to a server action, which hands it to a SECURITY DEFINER
+ * database function that normalises, validates and rate-limits it. Nothing
+ * about Resend or the subscriber list is reachable from this component —
+ * it knows an email address and a result, and nothing else.
  */
 export function NewsletterCta({
   className,
   tone = "band",
+  /** Recorded on the subscriber row, so it is clear where someone signed up. */
+  source = "insights",
 }: {
   className?: string
   /** `band` for a full-width section, `card` for a sidebar or article foot. */
   tone?: "band" | "card"
+  source?: string
 }) {
   const [email, setEmail] = useState("")
-  const [acknowledged, setAcknowledged] = useState(false)
+  const [result, setResult] = useState<SubscribeResult | null>(null)
+  const [pending, startTransition] = useTransition()
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    // Intentionally does not transmit anything. See the note above.
-    setAcknowledged(true)
+    // A second submission while the first is in flight would create a second
+    // sign-up attempt against the rate limit for no benefit.
+    if (pending) return
+
+    const value = email.trim()
+    if (!value) return
+
+    startTransition(async () => {
+      const next = await subscribeToNewsletter(value, source)
+      setResult(next)
+      // Only clear the field on success. After an error the address is still
+      // there to correct, rather than having to be retyped.
+      if (next.state === "subscribed" || next.state === "already_subscribed") {
+        setEmail("")
+      }
+    })
   }
+
+  const settled =
+    result?.state === "subscribed" || result?.state === "already_subscribed"
 
   const body = (
     <>
@@ -54,23 +76,20 @@ export function NewsletterCta({
         technology. No schedule to pad out, and no marketing sequences.
       </p>
 
-      {acknowledged ? (
+      {settled ? (
         <div className="mt-6 flex items-start gap-3 rounded-lg bg-primary/10 p-4 ring-1 ring-primary/25">
           <Check className="mt-0.5 size-4 shrink-0 text-brand-lift" aria-hidden />
-          <p className="text-sm leading-relaxed text-foreground">
-            The mailing list is not live yet, so nothing was sent and your
-            address was not stored. Email us at{" "}
-            <a
-              href="mailto:trevordigitalsolutions@gmail.com"
-              className="font-medium text-brand-lift underline-offset-4 hover:underline"
-            >
-              trevordigitalsolutions@gmail.com
-            </a>{" "}
-            to be added when it opens.
-          </p>
+          <div className="text-sm leading-relaxed text-foreground">
+            <p>{result.message}</p>
+            {result.state === "subscribed" && result.welcomeSent === false ? (
+              <p className="mt-2 text-muted-foreground">
+                You can unsubscribe from any issue we send.
+              </p>
+            ) : null}
+          </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="mt-6">
+        <form onSubmit={handleSubmit} noValidate className="mt-6">
           <Label htmlFor="newsletter-email" className="sr-only">
             Email address
           </Label>
@@ -84,17 +103,48 @@ export function NewsletterCta({
               inputMode="email"
               placeholder="you@company.com"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              disabled={pending}
+              aria-invalid={result ? true : undefined}
+              aria-describedby={result ? "newsletter-status" : undefined}
+              onChange={(event) => {
+                setEmail(event.target.value)
+                // Clear a stale error the moment the address is edited.
+                if (result) setResult(null)
+              }}
               className="h-11 flex-1 px-3.5"
             />
-            <Button type="submit" size="cta" className="shrink-0">
-              Subscribe
+            <Button type="submit" size="cta" className="shrink-0" disabled={pending}>
+              {pending ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" aria-hidden />
+                  Subscribing
+                </>
+              ) : (
+                "Subscribe"
+              )}
             </Button>
           </div>
-          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-            The list is not open yet — this form does not store or send
-            anything.
-          </p>
+
+          {result ? (
+            <p
+              id="newsletter-status"
+              role="alert"
+              className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-destructive"
+            >
+              <AlertCircle className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+              {result.message}
+            </p>
+          ) : (
+            <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+              One email per article, at most. Unsubscribe in one click, any time.
+            </p>
+          )}
+
+          {/* Announces the in-flight state to screen readers without moving
+              anything on screen. */}
+          <span aria-live="polite" className="sr-only">
+            {pending ? "Subscribing" : ""}
+          </span>
         </form>
       )}
     </>

@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   LogOut,
   type LucideIcon,
+  Mail,
   Menu,
   MessageSquare,
   Settings,
@@ -67,6 +68,8 @@ const NAV: NavGroup[] = [
       { name: "Testimonials", href: "/admin/testimonials", icon: Star },
       { name: "Gallery", href: "/admin/gallery", icon: ImageIcon },
       { name: "Messages", href: "/admin/messages", icon: MessageSquare },
+      // Subscribers and issues share this entry; the section has its own tabs.
+      { name: "Newsletter", href: "/admin/newsletter", icon: Mail, prefix: true },
       { name: "Settings", href: "/admin/settings", icon: Settings },
     ],
   },

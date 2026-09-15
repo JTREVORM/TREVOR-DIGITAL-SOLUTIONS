@@ -14,6 +14,7 @@ import {
   getRelatedArticles,
 } from "@/lib/content/insights-queries"
 import { site } from "@/lib/site"
+import { JsonLd, breadcrumbSchema } from "@/components/site/structured-data"
 
 /**
  * Rendered per request.
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = article.seoTitle ?? article.title
   const description = article.seoDescription ?? article.excerpt
   const url = `${site.url}/insights/${article.slug}`
-  const image = article.featuredImage ?? "/logo.png"
+  const image = article.featuredImage ?? site.ogImage
 
   return {
     title,
@@ -84,7 +85,7 @@ export default async function ArticlePage({ params }: Props) {
     keywords: article.tags.join(", "),
     articleSection: article.category.name,
     wordCount: article.readingTime * 200,
-    image: `${site.url}${article.featuredImage ?? "/logo.png"}`,
+    image: `${site.url}${article.featuredImage ?? site.ogImage}`,
     author: {
       "@type": "Person",
       name: article.author.name,
@@ -101,9 +102,14 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd data={jsonLd} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Insights", path: "/insights" },
+          { name: article.category.name, path: `/insights/category/${article.category.slug}` },
+          { name: article.title, path: `/insights/${article.slug}` },
+        ])}
       />
 
       <ArticleHeader article={article} />

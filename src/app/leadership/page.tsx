@@ -19,6 +19,7 @@ import { Section, SectionHeading } from "@/components/site/section"
 import { Reveal } from "@/components/site/reveal"
 import { CtaBand } from "@/components/site/cta-band"
 import { contact, site } from "@/lib/site"
+import { BreadcrumbJsonLd } from "@/components/site/structured-data"
 
 export const metadata: Metadata = {
   title: "Leadership",
@@ -140,6 +141,8 @@ export default function LeadershipPage() {
 
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Home", path: "/" }, { name: "About", path: "/about" }, { name: "Leadership", path: "/leadership" }]} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

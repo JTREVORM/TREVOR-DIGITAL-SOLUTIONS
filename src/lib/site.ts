@@ -8,12 +8,34 @@ export const site = {
   name: "Trevor Digital Solutions",
   shortName: "TDS",
   tagline: "Transforming ideas into powerful digital solutions.",
+  /**
+   * The one canonical production origin. Every canonical tag, sitemap entry,
+   * Open Graph URL and structured-data URL is built from this, so the site
+   * can never advertise a preview or localhost address to a crawler.
+   *
+   * If www.trevordigitalsolutions.com is also served, redirect it here at the
+   * DNS or host level rather than adding a second canonical.
+   */
   url: "https://trevordigitalsolutions.com",
+  /** 1200x630 social card, generated from the logo by scripts/make-icons.mjs. */
+  ogImage: "/og-image.png",
   founder: "Mwesigwa Trevor Joseph",
   founderRole: "Founder & CEO",
   location: "Kampala, Uganda",
   hours: "Mon - Sat, 8:00 AM - 6:00 PM EAT",
 } as const
+
+/**
+ * The default social card entry.
+ *
+ * A page that defines its own `openGraph` block replaces the root one
+ * outright — Next does not merge the two — so any page with custom Open Graph
+ * metadata has to restate the image or it ships without one. Spread this in
+ * rather than repeating the dimensions at every call site.
+ */
+export const defaultOgImages = [
+  { url: site.ogImage, width: 1200, height: 630, alt: site.name },
+]
 
 export const contact = {
   phone: "+256 740 081 305",

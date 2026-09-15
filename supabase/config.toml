@@ -1,0 +1,25 @@
+# Supabase CLI configuration.
+#
+# Only what this project actually needs. Everything omitted falls back to the
+# CLI's defaults.
+#
+# Deploy the function with:
+#   npx supabase functions deploy send-newsletter-email --project-ref dffvfrstqjiwwfrvmyay
+
+project_id = "dffvfrstqjiwwfrvmyay"
+
+[functions.send-newsletter-email]
+# The gateway's JWT check is switched off deliberately, and the function is
+# not left open by doing so.
+#
+# This project's publishable key is the new `sb_publishable_...` format rather
+# than a signed JWT, so the gateway check would reject perfectly legitimate
+# server-to-server calls while accepting anything else that happened to carry
+# a valid token. It answers "is this token signed?", not "who is this?".
+#
+# The function answers the real question itself, twice, before it does any
+# work: a constant-time comparison against NEWSLETTER_INTERNAL_SECRET (which
+# only the TDS server holds), and, for anything that sends an issue, an
+# explicit auth.getUser() on the caller's access token followed by a role
+# lookup in `profiles`. See the header comment in index.ts.
+verify_jwt = false

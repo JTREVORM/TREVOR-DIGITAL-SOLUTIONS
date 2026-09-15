@@ -7,11 +7,13 @@ import { Section, SectionHeading } from "@/components/site/section"
 import { Reveal } from "@/components/site/reveal"
 import { CtaBand } from "@/components/site/cta-band"
 import { techGroups } from "@/lib/content/technologies"
+import { BreadcrumbJsonLd } from "@/components/site/structured-data"
+import { defaultOgImages } from "@/lib/site"
 
 export const metadata: Metadata = {
   title: "Technologies",
   description:
-    "The stack Trevor Digital Solutions builds on: React, Next.js and TypeScript on the frontend; Node.js, Python and Django on the backend; PostgreSQL, Supabase and MongoDB for data; Flutter for mobile; AWS, Google Cloud and Docker for deployment; MQL4 and MQL5 for MetaTrader.",
+    "The stack we build on: React, Next.js and TypeScript, Node.js and Python, PostgreSQL and Supabase, Flutter, AWS and Docker, and MQL4/MQL5 for MetaTrader.",
   keywords: [
     "Next.js developer Uganda",
     "React developer Kampala",
@@ -25,6 +27,7 @@ export const metadata: Metadata = {
     description:
       "Frontend, backend, database, mobile, cloud and trading technology — the tools we actually build with.",
     url: "https://trevordigitalsolutions.com/technologies",
+    images: defaultOgImages,
   },
   alternates: { canonical: "https://trevordigitalsolutions.com/technologies" },
 }
@@ -53,6 +56,8 @@ export default function TechnologiesPage() {
 
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Home", path: "/" }, { name: "Technologies", path: "/technologies" }]} />
+
       <PageHero
         eyebrow="Technologies"
         title="A deliberately boring stack."

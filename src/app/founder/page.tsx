@@ -18,6 +18,7 @@ import { Reveal } from "@/components/site/reveal"
 import { CtaBand } from "@/components/site/cta-band"
 import { LinkedInIcon, WhatsAppIcon } from "@/components/site/social-icons"
 import { contact, site } from "@/lib/site"
+import { BreadcrumbJsonLd } from "@/components/site/structured-data"
 
 export const metadata: Metadata = {
   title: "Founder",
@@ -127,6 +128,8 @@ export default function FounderPage() {
 
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Home", path: "/" }, { name: "About", path: "/about" }, { name: "Founder", path: "/founder" }]} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}

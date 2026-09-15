@@ -7,11 +7,13 @@ import { Section } from "@/components/site/section"
 import { Reveal } from "@/components/site/reveal"
 import { CtaBand } from "@/components/site/cta-band"
 import { serviceCategories, servicesInCategory } from "@/lib/content/services"
+import { BreadcrumbJsonLd } from "@/components/site/structured-data"
+import { defaultOgImages } from "@/lib/site"
 
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Software development, web and mobile, business systems including SACCO and inventory platforms, AI and automation, trading technology, and cloud and integration work from Trevor Digital Solutions.",
+    "Software development, web and mobile, business systems including SACCO and inventory platforms, AI and automation, trading technology, cloud and integration.",
   keywords: [
     "software development services Uganda",
     "custom software Uganda",
@@ -27,6 +29,7 @@ export const metadata: Metadata = {
     description:
       "Six areas of work: software development, web and mobile, business systems, AI and automation, trading technology, cloud and integration.",
     url: "https://trevordigitalsolutions.com/services",
+    images: defaultOgImages,
   },
   alternates: { canonical: "https://trevordigitalsolutions.com/services" },
 }
@@ -34,6 +37,8 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Home", path: "/" }, { name: "Services", path: "/services" }]} />
+
       <PageHero
         eyebrow="Services"
         title="Six areas of work. One way of working."

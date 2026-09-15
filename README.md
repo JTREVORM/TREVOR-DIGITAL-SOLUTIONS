@@ -27,10 +27,15 @@ Create `.env` (or `.env.local`) in the project root. This project is
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-or-publishable-key
 
-# Server only — NEVER prefix either of these with NEXT_PUBLIC_
+# Server only — NEVER prefix any of these with NEXT_PUBLIC_
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key   # bypasses RLS entirely
 DATABASE_URL=postgresql://...                     # direct Postgres, migrations only
+NEWSLETTER_INTERNAL_SECRET=random-32-bytes        # shared with the Edge Function
 ```
+
+`RESEND_API_KEY` is deliberately **not** in this list. It is set as a Supabase
+Edge Function secret and never reaches this application at all — see
+[Newsletter](#newsletter).
 
 `.env*` is gitignored. Never commit real keys.
 
@@ -48,6 +53,7 @@ node scripts/db.mjs apply supabase/migrations/0001_core_schema.sql
 node scripts/db.mjs apply supabase/migrations/0002_rls_policies.sql
 node scripts/db.mjs apply supabase/migrations/0003_storage.sql
 node scripts/db.mjs apply supabase/migrations/0004_seed.sql
+node scripts/db.mjs apply supabase/migrations/0005_newsletter.sql
 ```
 
 ### Admin users
@@ -70,6 +76,74 @@ node scripts/verify-security.mjs <admin-email> <admin-password>
 Attacks the database with the anon key the way a crafted request would, then
 repeats the checks as a signed-in admin. Every assertion must pass.
 
+```bash
+node scripts/verify-newsletter.mjs <admin-email> <admin-password>
+```
+
+The same treatment for the newsletter: confirms the public can subscribe and
+unsubscribe but cannot read the subscriber list, forge a send-history entry, or
+claim an issue for sending.
+
+## Newsletter
+
+Subscribers sign up from the form on every Insights page. Issues are written in
+the admin portal at `/admin/newsletter` and delivered through
+[Resend](https://resend.com).
+
+### Where the secrets live
+
+The Resend API key is held **only** in Supabase Edge Function secrets. This
+application never sees it, and no browser code ever talks to Resend. All mail
+goes through the `send-newsletter-email` Edge Function, which is gated twice:
+
+1. `NEWSLETTER_INTERNAL_SECRET`, a shared secret proving the request came from
+   this server rather than from someone who found the function's URL.
+2. For anything that sends an issue, the calling admin's own access token,
+   which the function verifies against `profiles` using the service role.
+
+The public subscribe and unsubscribe paths never touch the tables directly.
+`anon` holds EXECUTE on two `SECURITY DEFINER` functions and no privilege on
+`newsletter_subscribers` at all, so there is no policy that could be loosened by
+accident into exposing the list.
+
+### Deploying the Edge Function
+
+```bash
+npx supabase login
+npx supabase link --project-ref <your-project-ref>
+
+npx supabase secrets set RESEND_API_KEY=re_xxxxxxxx
+npx supabase secrets set NEWSLETTER_INTERNAL_SECRET=<same value as .env>
+npx supabase secrets set SITE_URL=https://trevordigitalsolutions.com
+
+npx supabase functions deploy send-newsletter-email
+```
+
+`SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected by the platform —
+do not set them yourself.
+
+Optional secrets:
+
+| Secret | Default |
+| --- | --- |
+| `NEWSLETTER_FROM` | `Trevor Digital Solutions <insights@trevordigitalsolutions.com>` |
+| `NEWSLETTER_REPLY_TO` | unset (no Reply-To header) |
+| `SITE_URL` | `https://trevordigitalsolutions.com` |
+
+The sending domain `trevordigitalsolutions.com` must be verified in Resend
+(SPF and DKIM records added at your DNS host) before any mail will be accepted.
+
+### Sending an issue
+
+Write it at `/admin/newsletter/issues/new`. **Saving stores a draft and sends
+nothing** — there is no path from the save button to Resend. Send yourself a
+test first, then use *Send newsletter*, which asks for confirmation and names
+the number of recipients.
+
+An issue can only be sent once: `begin_newsletter_send` claims it atomically, so
+a double click, a retried request or two admins pressing Send together all lose
+the race and are told so.
+
 ## Project structure
 
 | Path | Purpose |
@@ -80,6 +154,8 @@ repeats the checks as a signed-in admin. Every assertion must pass.
 | `src/components/site/` | Design-system primitives: `Section`, `PageHero`, `CtaBand`, `ProjectCard`, logo, `Reveal` |
 | `src/components/sections/` | Homepage and page sections |
 | `src/components/ui/` | shadcn primitives |
+| `src/lib/newsletter/` | Newsletter types, admin data service, and the server-only bridge to the Edge Function |
+| `supabase/functions/` | Deno Edge Functions. Excluded from the app's tsconfig — they have their own runtime and type checker |
 | `src/proxy.ts` | Request middleware; guards `/admin/*` |
 | `src/app/globals.css` | Brand design tokens sampled from the TDS logo |
 
